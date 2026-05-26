@@ -271,12 +271,11 @@ chmod +x .git/hooks/pre-commit .git/hooks/post-checkout
 ## Next Steps
 
 1. [x] Write PLAN.md (this document)
-2. [x] Initial commit with PLAN.md, LICENSE, README.md
-3. [x] Write inventory/README.md (how to maintain inventory)
-4. [x] Write inventory/catalog.json initial structure
-5. [x] Write scripts/.env (SKILLS_PKG, install defaults)
-6. [x] Write scripts/skills.sh (add/update/remove/sync/ls/find/init)
-7. [x] Write scripts/catalog.sh (rebuild catalog.json)
-8. [x] Write scripts/init.sh (one-shot setup)
-9. [ ] Final commit of everything
-10. [ ] Push to `https://github.com/sprngr/cantrips.git`
+2. [ ] Initial README.md
+3. [ ] Write inventory/README.md (how to maintain inventory)
+4. [ ] Write inventory/catalog.json initial structure
+5. [ ] Write scripts/.env (SKILLS_PKG, install defaults)
+6. [ ] Write scripts/skills.sh (add/update/remove/sync/ls/find/init)
+7. [ ] Write scripts/catalog.sh (rebuild catalog.json)
+8. [ ] Write scripts/init.sh (one-shot setup)
+9. [ ] Final README.md with workflow
