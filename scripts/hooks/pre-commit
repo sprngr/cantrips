@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Pre-commit hook: check for missing frontmatter or empty SKILL.md
+set -euo pipefail
+
+# Only run when md files or agent files are staged
+if git diff --cached --name-only | grep -qE '\.(agent\.md|SKILL\.md)$'; then
+  errors=0
+  
+  for f in $(git diff --cached --name-only | grep -E '\.(agent\.md|SKILL\.md)$'); do
+    if [[ "$f" == *".agent.md" ]] || [[ "$f" == *"SKILL.md" ]]; then
+      if ! head -3 "$f" | grep -q "^---$"; then
+        echo "Error: $f is missing frontmatter (---)"
+        errors=$((errors + 1))
+      fi
+    fi
+  done
+  
+  if [ "$errors" -gt 0 ]; then
+    echo "Pre-commit check failed: $errors file(s) missing frontmatter"
+    exit 1
+  fi
+fi
