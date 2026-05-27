@@ -1,0 +1,19 @@
+# .skill-plan.yaml - Auto-generated interview state
+intent: "[user's original intent statement]"
+scope: "[single | moderate | extended]"
+mechanism: "[reasoning | scripts | hybrid]"
+context_assets: "[none | schema | templates | checklists | manuals]"
+target_path: "[resolved absolute or workspace-relative path]"
+tier: "[A | B | C]"
+workflow_notes:
+  - "[freeform refinement from State 3.5]"
+turns:
+  - turn: 1 (intent)
+    answer: "..."
+    timestamp: "ISO-8601"
+  - turn: 2 (scope)
+    answer: "..."
+    timestamp: "ISO-8601"
+draft_changes:
+  - "[conditional pushed to scripts/fallback_handler.py]"
+completed: false

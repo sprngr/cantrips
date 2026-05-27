@@ -1,0 +1,21 @@
+# .skill-plan.yaml - Auto-generated interview state
+intent: "Audit & validate agent skills against agentskills.io spec, best-practices, eval procedure, and skills-ref impl"
+scope: "moderate"
+mechanism: "hybrid"
+context_assets: "checklists + templates"
+target_path: "/mnt/f/workspace/cantrips/skills/skill-check"
+tier: "B"
+workflow_notes: []
+turns:
+  - turn: 1 (intent)
+    answer: "Audit & validate agent skills against agentskills.io spec, best-practices, eval procedure, and skills-ref impl"
+  - turn: 2 (scope)
+    answer: "moderate pipeline (Tier B)"
+  - turn: 3 (mechanism)
+    answer: "hybrid (scripts + reasoning)"
+  - turn: 4 (context_assets)
+    answer: "checklists + templates in references/"
+  - turn: 5 (target_path)
+    answer: "/mnt/f/workspace/cantrips/skills/skill-check"
+draft_changes: []
+completed: false
