@@ -1,5 +1,5 @@
 # .skill-plan.yaml - Auto-generated interview state
-intent: "Audit & validate agent skills against agentskills.io spec, best-practices, eval procedure, and skills-ref impl"
+intent: "Audit & validate agent skills against agentskills.io spec, best-practices, and skills-ref impl"
 scope: "moderate"
 mechanism: "hybrid"
 context_assets: "checklists + templates"
@@ -8,7 +8,7 @@ tier: "B"
 workflow_notes: []
 turns:
   - turn: 1 (intent)
-    answer: "Audit & validate agent skills against agentskills.io spec, best-practices, eval procedure, and skills-ref impl"
+    answer: "Audit & validate agent skills against agentskills.io spec, best-practices, and skills-ref impl"
   - turn: 2 (scope)
     answer: "moderate pipeline (Tier B)"
   - turn: 3 (mechanism)

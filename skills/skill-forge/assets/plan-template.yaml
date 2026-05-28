@@ -16,4 +16,6 @@ turns:
     timestamp: "ISO-8601"
 draft_changes:
   - "[conditional pushed to scripts/fallback_handler.py]"
+example_placed: "[inline | references/Example.md]"
+example_generated: false
 completed: false

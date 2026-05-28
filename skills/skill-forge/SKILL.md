@@ -53,6 +53,19 @@ After each turn: show decision log, append to `.skill-plan.yaml`.
 * Run draft against the clarity checklist below. Print remaining failures. Fix internally.
 * Show corrected draft. Ask: "Write to disk or adjust?"
 
+### 4.5. Example (Calibration)
+* Generate end-to-end example showing the skill in action. Format: simulated transcript of user prompt → agent Turn 1 → Turn 2 → … → final output.
+* **Placement rule:** If Tier A (SKILL.md only), embed example as `## Example` section inside SKILL.md. If Tier B or C, write to `references/Example.md`.
+* **Content rules:**
+  - Show realistic user input matching the `Use when` triggers from frontmatter.
+  - Walk through every workflow step the SKILL.md defines.
+  - Include at least one edge case or correction (backtrack, conditional push, refinement).
+  - End with the concrete output the skill produces.
+  - Add `### Agent-calibration notes` block: tone, pacing, anti-pattern catches, output shape.
+* **Reference:** See `references/Examples.md` §Full Walkthrough for format model.
+* Ask: "Example looks good? [yes / no / edit]"
+* Persist example path + `example_generated: true` to `.skill-plan.yaml`.
+
 #### Gotchas: Anti-Patterns (enforce during drafting)
 * ❌ "Consider doing X" → Replace with "Do X."
 * ❌ "You might want to..." → Remove. Hard requirement or drop.
@@ -77,18 +90,25 @@ After each turn: show decision log, append to `.skill-plan.yaml`.
 9. Total instruction lines <= 80 (reserve 20 for frontmatter + headers)
 10. If step requires external tool, tool name is explicit
 
+### 4.5. Example (Calibration)
+* Generate end-to-end walkthrough of the skill in action. Match format in `references/Examples.md` §Full Walkthrough.
+* **Content:** Simulated transcript: user prompt → Turn 1 intent → Turn 2 scope → … → final output. Include at least one backtrack or anti-pattern catch.
+* **Placement:** Tier A → embed as `## Example` section inside SKILL.md. Tier B/C → write to `references/Example.md`.
+* Show example. Ask: "Example accurate? [yes / no / edit]"
+* Store `example_placed: inline | references/Example.md` + `example_generated: true` in plan.
+
 ### 5. Write (Synthesis)
 * Check target path. Warn on collision. Require explicit yes to overwrite.
-* Write all files via `Write` tool: SKILL.md, then `scripts/`, `references/`, `assets/` per tier.
+* Write all files via `Write` tool: SKILL.md, then `scripts/`, `references/` (including `Example.md` if Tier B/C), `assets/` per tier.
 * Finalize `.skill-plan.yaml` → set `completed: true`.
 * Say: "Skill forged."
 
 ### Tier Output Map
 | Tier | Output |
 |------|--------|
-| A | `SKILL.md` only |
-| B | `SKILL.md` + `scripts/*` + `references/*` (if context=yes) |
-| C | `SKILL.md` orchestrator + `references/*.md` per stage playbook |
+| A | `SKILL.md` (example inline as `## Example`) |
+| B | `SKILL.md` + `scripts/*` + `references/Example.md` + `references/*` (if context=yes) |
+| C | `SKILL.md` orchestrator + `references/Example.md` + `references/*.md` per stage playbook |
 
 ## Reference Files
 * `assets/skill-template.md` — SKILL.md skeleton for generated skills

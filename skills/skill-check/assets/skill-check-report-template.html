@@ -58,16 +58,6 @@
     <div class="value {{BP_CLASS}}">{{BP_SCORE}}</div>
     <div class="sub">{{BP_PCT}} &mdash; {{BP_SUBTITLE}}</div>
   </div>
-  <div class="score-card">
-    <div class="label">Eval Readiness</div>
-    <div class="value {{EVAL_CLASS}}">{{EVAL_SCORE}}</div>
-    <div class="sub">{{EVAL_PCT}} &mdash; {{EVAL_SUBTITLE}}</div>
-  </div>
-  <div class="score-card">
-    <div class="label">Structure Score</div>
-    <div class="value {{STRUCT_CLASS}}">{{STRUCT_SCORE}}</div>
-    <div class="sub">{{STRUCT_SUBTITLE}}</div>
-  </div>
 </div>
 
 <!-- SPEC COMPLIANCE -->
@@ -87,16 +77,6 @@
 {{BP_ROWS}}
   </tbody>
 </table>
-
-<!-- EVAL READINESS -->
-<h2>Eval Readiness Scorecard</h2>
-<table>
-  <thead><tr><th>Eval Item</th><th>Result</th><th>Detail</th></tr></thead>
-  <tbody>
-{{EVAL_ROWS}}
-  </tbody>
-</table>
-<p class="warn">Score: {{EVAL_SCORE}} &mdash; {{EVAL_NOTES}}</p>
 
 <!-- STRUCTURAL DIFF -->
 <h2>Structure Comparison vs. Reference</h2>
