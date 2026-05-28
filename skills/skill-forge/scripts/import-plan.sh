@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # import-plan.sh — validate + extract .skill-plan.yaml for agent resume
+# Requires: python3, PyYAML
 # Usage: ./import-plan.sh <path-to-.skill-plan.yaml>
 # Exit: 0=ok, 1=missing file, 2=bad yaml, 3=missing keys, 4=already completed
 

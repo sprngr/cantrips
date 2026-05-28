@@ -1,0 +1,36 @@
+# .skill-plan.yaml - Auto-generated interview state
+intent: "Create & run skill evaluations per agentskills.io eval spec. Full lifecycle: test case authoring, dual-run execution, assertion grading, benchmark aggregation, pattern analysis, improvement handoff to skill-forge."
+scope: "extended"
+mechanism: "hybrid"
+context_assets: "schemas-in-assets, prompt-templates, checklist, workspace-layout, html-report-template"
+target_path: "/mnt/f/workspace/skills/skill-eval/"
+tier: "C"
+workflow_notes:
+  - "references/ is flat, all templates/schemas in assets/"
+  - "improvement output is structured skill-forge prompt"
+  - "HTML report mirrors skill-check dark theme"
+  - "post-forge: skill-check drops eval section, delegates to skill-eval"
+turns:
+  - turn: 1 (intent)
+    answer: "Create & run skill evals per agentskills.io spec with iteration loop and skill-forge handoff"
+    timestamp: "2026-05-27"
+  - turn: 2 (scope)
+    answer: "extended orchestration (Tier C)"
+    timestamp: "2026-05-27"
+  - turn: 3 (mechanism)
+    answer: "hybrid (C) - scripts for deterministic work, LLM for judgment"
+    timestamp: "2026-05-27"
+  - turn: 4 (context)
+    answer: "JSON schemas, grading prompts, test quality checklist, workspace layout, HTML report template"
+    timestamp: "2026-05-27"
+  - turn: 5 (target)
+    answer: "/mnt/f/workspace/skills/skill-eval/"
+    timestamp: "2026-05-27"
+draft_changes:
+  - "Step 4 split from 3-sentence compound to single-verb imperative"
+  - "Steps 7/14/16/17 split compound actions (read+fill+write) across numbered steps"
+  - "Step 24 conditional loop flattened to confirmation-triggered step 27"
+  - "Added grade_assertions.py helper for deterministic assertion checks"
+  - "Added aggregate_benchmark.py helper for stat computation"
+  - "Added spawn_runs.py helper for subagent dispatch generation"
+completed: true

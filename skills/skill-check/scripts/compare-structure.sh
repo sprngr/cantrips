@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # compare-structure.sh - Compare skill directory structure against skills-ref patterns
+# Requires: jq
 # Usage: scripts/compare-structure.sh <skill-path>
 # Output: JSON with structure_score, expected_dirs, found_dirs, missing_dirs, warnings
 
@@ -31,7 +32,7 @@ for d in scripts references assets; do
     else
         MISSING_DIRS+=("$d/")
     fi
-fi
+done
 
 # Check for evals directory (best practice for testable skills)
 if [[ -d "$SKILL_DIR/evals" ]]; then
