@@ -75,8 +75,8 @@ The agent authors 2-3 test cases, scaffolds a workspace, runs with-skill and wit
 ### 7. Produce improvement recommendations
 
 25. Collect failure signals: failed assertions, human feedback, transcript patterns.
-26. Generate skill-forge improvement prompt. Format as YAML with `skill_path`, `iteration`, `benchmark_delta`, and `changes[]` array. Each change has `type`, `section`, `reason`, `suggestion`.
-27. Print improvement prompt for user to feed into skill-forge.
+26. Generate improvement prompt. Format as YAML with `skill_path`, `iteration`, `benchmark_delta`, and `changes[]` array. Each change has `type`, `section`, `reason`, `suggestion`.
+27. Print improvement prompt for user to feed into downstream skills.
 28. On user confirmation, loop to step 7 with new iteration number.
 
 ## Reference files
