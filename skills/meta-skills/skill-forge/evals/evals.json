@@ -1,0 +1,85 @@
+{
+  "skill_name": "skill-forge",
+  "evals": [
+    {
+      "id": "resume-from-plan",
+      "prompt": "Continue the skill creation process. The target directory is /tmp/forged-resume.",
+      "expected_output": {
+        "description": "Skill imports existing .skill-plan.yaml via import-plan.sh, correctly determines turn progress, then proceeds from the next unprompted turn. Decision log printed. Asks user about the current turn's question.",
+        "artifacts": ["outputs/decision_log.txt"],
+        "assertions": [
+          "Output contains turn number matching one past turns[] length in .skill-plan.yaml",
+          "Skill prints summary: intent, tier, turns completed, target path",
+          "Skill asks a question corresponding to the current turn (not an already-answered turn)",
+          "No regression: already-answered questions are not repeated"
+        ]
+      },
+      "files": []
+    },
+    {
+      "id": "tier-b-forge-full-flow",
+      "prompt": "Create a new skill called 'test-analyzer' that reviews test coverage for a given codebase. It should analyze coverage gaps, suggest missing test scenarios, and classify bugs by severity. The skill will need scripts for analysis and reference checklists.",
+      "expected_output": {
+        "description": "Skill-forge produces a Tier B bundle: SKILL.md, scripts/coverage_analyzer.sh, references/Example.md, references/coverage-checklist.md. SKILL.md contains progressive dialogue tree with all turns. .skill-plan.yaml has completed:true.",
+        "artifacts": ["outputs/SKILL.md", "outputs/scripts/coverage_analyzer.sh", "outputs/references/Example.md", "outputs/references/coverage-checklist.md", "outputs/.skill-plan.yaml"],
+        "assertions": [
+          "SKILL.md has YAML frontmatter with name, description, use_when",
+          "SKILL.md contains state machine with turns 0-5",
+          "SKILL.md has <= 80 instruction lines, each imperative verb-first",
+          "scripts/ contains at least one script file (Tier B requires scripts)",
+          "references/ contains Example.md (Tier B placement rule)",
+          ".skill-plan.yaml has completed: true",
+          "Example.md shows end-to-end transcript with at least one backtrack scenario"
+        ]
+      },
+      "files": []
+    },
+    {
+      "id": "backtrack-contradiction-detection",
+      "prompt": "I want to make a skill. Actually wait, scratch that - I want a skill for debugging HTTP APIs, not a general skill.",
+      "expected_output": {
+        "description": "Skill detects contradiction between previous intent (general skill) and new intent (HTTP API debugging). Invalidates fork point, asks user to re-confirm intent from Turn 1. Does NOT proceed to Turn 2 with conflicting intent.",
+        "artifacts": ["outputs/decision_log.txt"],
+        "assertions": [
+          "Output flags contradiction between prior and new intent",
+          "Output resets turns[] to 0 or clears downstream decisions",
+          "Output re-prompts for Turn 1 (intent) rather than skipping ahead",
+          "Decision log records the backtrack event"
+        ]
+      },
+      "files": []
+    },
+    {
+      "id": "anti-pattern-enforcement",
+      "prompt": "Create a skill called 'doc-summarizer' that summarizes API documentation. Single task only (Tier A). Just write the SKILL.md.",
+      "expected_output": {
+        "description": "Skill-forge drafts SKILL.md (Tier A, no scripts), scans it against anti-patterns, reports violations, fixes them, shows corrected draft. Example embedded inline as ## Example section within SKILL.md.",
+        "artifacts": ["outputs/SKILL.md", "outputs/anti-pattern-violations.txt"],
+        "assertions": [
+          "SKILL.md avoids all listed anti-patterns: no hedging words, no 'consider/might/perhaps', no >3 sentence paragraphs, no nested lists >2 levels",
+          "Every instruction in SKILL.md starts with imperative verb",
+          "No instruction exceeds 2 lines",
+          "Example section is embedded inline (Tier A placement rule)",
+          "Total instruction lines <= 80",
+          "Anti-pattern violations file lists any remaining items or states 'all clear'"
+        ]
+      },
+      "files": []
+    },
+    {
+      "id": "uncertainty-handling",
+      "prompt": "Help me make a skill.",
+      "expected_output": {
+        "description": "Skill detects ambiguous/stuck user input (no concrete intent). Offers 2-3 starter templates from references/Examples.md or built-in defaults. Does NOT proceed with guessed intent.",
+        "artifacts": ["outputs/decision_log.txt"],
+        "assertions": [
+          "Output explicitly asks user to define intent or choose a template",
+          "Output provides at least 2 starter templates or examples",
+          "Output does NOT guess or assume the user's intent",
+          "Output stays at Turn 1 (Onboarding) without proceeding"
+        ]
+      },
+      "files": []
+    }
+  ]
+}

@@ -15,7 +15,7 @@ Orchestrate the full evaluation lifecycle for agentskills.io skills.
 Agent: "eval my-new-skill"
 ```
 
-The agent authors 2-3 test cases, scaffolds a workspace, runs with-skill and without-skill baselines, grades outputs, and produces a benchmark report.
+The agent authors 3-5 test cases, scaffolds a workspace, runs with-skill and without-skill baselines, grades outputs, and produces a benchmark report.
 
 ## Workflows
 
@@ -23,20 +23,20 @@ The agent authors 2-3 test cases, scaffolds a workspace, runs with-skill and wit
 
 1. Read target skill `SKILL.md`. Extract capabilities and constraints.
 2. Load `references/test-quality-checklist.md`.
-3. Generate 2-3 test cases. Cover normal prompt, edge case, and malformed input.
+3. Generate 3-5 test cases. Cover normal prompt, edge case, and malformed input.
 4. Write test cases to `<target-skill>/evals/evals.json`. Conform to `assets/evals-schema.json`. Produce JSON with keys `skill_name`, `evals[]`. Each eval has `id`, `prompt`, `expected_output`, optional `files[]`.
-5. Create input fixture files in `<target-skill>/evals/files/`.
+5. Create input fixture file at `<target-skill>/evals/evals.json`.
 6. Validate `evals.json` against the test quality checklist. Fix flagged items.
 
 ### 2. Scaffold workspace
 
 7. Run `scripts/scaffold-workspace.sh <workspace-dir> <iteration-N> <evals-json>`. Script creates per-eval `with_skill/outputs/` and `without_skill/outputs/` directories.
-8. Copy current skill to `<workspace>/skill-snapshot/`. Overwrite existing snapshot.
+8. Copy current skill directory to `<workspace>/skill-snapshot/`. Overwrite existing snapshot.
 
 ### 3. Execute eval runs
 
 9. Read `references/grading-prompt-template.md`.
-10. Spawn a subagent for each `with_skill` run. Pass skill snapshot path, test prompt, input files, and output directory.
+10. Spawn a subagent for each `with_skill` run. Pass skill directory in skill snapshot path, test prompt, input files, and output directory.
 11. Save `with_skill/timing.json` on each subagent return.
 12. Spawn a subagent for each `without_skill` run. Same prompt, no skill path.
 13. Save `without_skill/timing.json` on each subagent return.

@@ -1,6 +1,6 @@
 # Grading Prompt Template
 ## Usage
-Fill variables in braces. Dispatch to a subagent for clean-context execution.
+Fill variables in braces. Dispatch to a subagent for clean-context execution. Ignore token usage concerns.
 
 ## With-Skill Run Template
 ```

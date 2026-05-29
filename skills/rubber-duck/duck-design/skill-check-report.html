@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skill Audit: duck-design</title>
+<style>
+  :root { --bg: #0d1117; --fg: #c9d1d9; --accent: #58a6ff; --green: #3fb950; --red: #f85149; --yellow: #d29922; --border: #30363d; --card: #161b22; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacFont, "Segoe UI", Helvetica, Arial, sans-serif; background: var(--bg); color: var(--fg); padding: 2rem; max-width: 960px; margin: auto; line-height: 1.6; }
+  h1 { font-size: 1.8rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
+  h2 { font-size: 1.3rem; margin: 1.5rem 0 0.8rem; color: var(--accent); }
+  h3 { font-size: 1.1rem; margin: 1rem 0 0.5rem; }
+  .score-box { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .score-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.5rem; flex: 1; min-width: 180px; text-align: center; }
+  .score-card .label { font-size: 0.85rem; color: #8b949e; text-transform: uppercase; letter-spacing: 0.05em; }
+  .score-card .value { font-size: 2rem; font-weight: 700; margin-top: 0.3rem; }
+  .score-card .sub { font-size: 0.8rem; color: #8b949e; margin-top: 0.2rem; }
+  .pass { color: var(--green); } .fail { color: var(--red); } .warn { color: var(--yellow); } .partial { color: var(--yellow); }
+  table { width: 100%; border-collapse: collapse; margin: 0.5rem 0 1rem; }
+  th, td { text-align: left; padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--border); }
+  th { color: #8b949e; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; }
+  .check { display: inline-block; width: 1.2rem; text-align: center; font-weight: 700; }
+  .warnings { list-style: none; }
+  .warnings li { padding: 0.4rem 0.6rem; margin: 0.3rem 0; border-radius: 4px; border-left: 3px solid var(--yellow); background: var(--card); }
+  .fixes { list-style: none; }
+  .fixes li { padding: 0.4rem 0.6rem; margin: 0.3rem 0; border-radius: 4px; border-left: 3px solid var(--accent); background: var(--card); }
+  .fixes li code { background: #21262d; padding: 0.1rem 0.4rem; border-radius: 3px; }
+  footer { margin-top: 2rem; color: #8b949e; font-size: 0.8rem; text-align: center; }
+  #machine-report { display: none; }
+  #machine-report summary { cursor: pointer; color: var(--accent); margin: 1rem 0; user-select: none; }
+  #machine-report[open] pre { display: block; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow-x: auto; font-size: 0.8rem; }
+</style>
+</head>
+<body>
+
+<details id="machine-report">
+<summary>Machine-readable summary (JSON) — click to expand</summary>
+<pre>
+{
+  "skill": "duck-design",
+  "target_path": "/mnt/f/workspace/cantrips/skills/rubber-duck/duck-design",
+  "audit_date": "2026-05-29",
+  "grade": "B-",
+  "grade_class": "warn",
+  "verdict_text": "Solid skeleton. Frontmatter clean. Body has real patterns but missing concrete I/O example and explicit workflow. Add one worked example and a quick-start step sequence to reach A.",
+  "spec": {
+    "score": 19,
+    "total": 22,
+    "checks": [
+      {"check": "SKILL.md_exists", "pass": true, "detail": "Found at skill root"},
+      {"check": "frontmatter_starts", "pass": true, "detail": "--- header present"},
+      {"check": "frontmatter_closes", "pass": true, "detail": "Closing --- found"},
+      {"check": "name_present", "pass": true, "detail": "name = duck-design"},
+      {"check": "name_lowercase", "pass": true, "detail": "All lowercase"},
+      {"check": "name_no_edge_hyphen", "pass": true, "detail": "No leading/trailing hyphen"},
+      {"check": "name_no_double_hyphen", "pass": true, "detail": "No consecutive hyphens"},
+      {"check": "name_valid_chars", "pass": true, "detail": "Only [a-z0-9-]"},
+      {"check": "name_length", "pass": true, "detail": "11 chars (limit 64)"},
+      {"check": "name_matches_dir", "pass": true, "detail": "name == dir"},
+      {"check": "description_valid", "pass": true, "detail": "Fits 1024 char limit"},
+      {"check": "description_describes_what_when", "pass": true, "detail": "Describes facilitation + lists triggers"},
+      {"check": "description_includes_triggers", "pass": true, "detail": "Triggers: design this, what's the tradeoff, etc."},
+      {"check": "body_valid_markdown", "pass": true, "detail": "Valid markdown"},
+      {"check": "step_by_step_instructions", "pass": "partial", "detail": "Has numbered frameworks but no explicit quick-start sequence (do A → B → C)"},
+      {"check": "examples_inputs_outputs", "pass": false, "detail": "No concrete I/O example — only reference tables"},
+      {"check": "edge_case_handling", "pass": true, "detail": "Boundaries section covers anti-patterns and redirects"},
+      {"check": "under_500_lines", "pass": true, "detail": "68 lines"},
+      {"check": "metadata_minimal", "pass": true, "detail": "Only name + desc (~2 tokens)"},
+      {"check": "instructions_under_5000", "pass": true, "detail": "Well under"},
+      {"check": "references_used_correctly", "pass": true, "detail": "Not applicable — no references/"},
+      {"check": "no_deep_nested_refs", "pass": true, "detail": "None present"}
+    ]
+  },
+  "best_practices": {
+    "score": 8,
+    "total": 11,
+    "warnings": [
+      "No explicit input/output format documented — agent doesn't know what to expect",
+      "No working example — skill shows frameworks but never demonstrates full run",
+      "No evals/evals.json — cannot verify skill behavior programmatically"
+    ]
+  },
+  "has_evals": false,
+  "structure": {
+    "score": 1,
+    "found": ["SKILL.md"],
+    "warnings": [
+      "Optional directories missing: scripts/, references/, assets/ (all optional, no penalty)",
+      "No evals/ directory — recommended for behavioral verification"
+    ]
+  },
+  "fixes": [
+    {"priority": "HIGH", "description": "Add a concrete worked example: developer prompt → skill output (before/after). Agents need to see the pattern, not just the framework."},
+    {"priority": "HIGH", "description": "Add a Quick Start section (3-5 numbered steps) as the first body content after the opening line. Current: jumps to methodology."},
+    {"priority": "MEDIUM", "description": "Document expected input format (e.g., 'paste design draft or architecture description') and output format (e.g., 'tradeoff table + challenge questions')."},
+    {"priority": "LOW", "description": "Consider adding references/ with extended tradeoff patterns if this skill grows. Current SKILL.md is appropriately scoped at 68 lines."}
+  ]
+}
+</pre>
+</details>
+
+<h1>Skill Audit Report: duck-design</h1>
+<p style="color: #8b949e;">Target: <code>/mnt/f/workspace/cantrips/skills/rubber-duck/duck-design</code> &mdash; Audited 2026-05-29</p>
+
+<div class="score-box">
+  <div class="score-card">
+    <div class="label">Spec Compliance</div>
+    <div class="value pass">19/22</div>
+    <div class="sub">86% — B- — Solid skeleton</div>
+  </div>
+  <div class="score-card">
+    <div class="label">Best Practices</div>
+    <div class="value warn">8/11</div>
+    <div class="sub">73% — Warnings on I/O + examples</div>
+  </div>
+</div>
+
+<h2>Spec Compliance (agentskills.io)</h2>
+<table>
+  <thead><tr><th>Check</th><th>Result</th><th>Detail</th></tr></thead>
+  <tbody>
+<tr><td>SKILL.md exists</td><td class="pass">PASS</td><td>Found at skill root</td></tr>
+<tr><td>Frontmatter starts</td><td class="pass">PASS</td><td>--- header present</td></tr>
+<tr><td>Frontmatter closes</td><td class="pass">PASS</td><td>Closing --- found</td></tr>
+<tr><td>name present</td><td class="pass">PASS</td><td>name = duck-design</td></tr>
+<tr><td>name lowercase</td><td class="pass">PASS</td><td>All lowercase</td></tr>
+<tr><td>name no edge hyphen</td><td class="pass">PASS</td><td>No leading/trailing hyphen</td></tr>
+<tr><td>name no double hyphen</td><td class="pass">PASS</td><td>No consecutive hyphens</td></tr>
+<tr><td>name valid chars</td><td class="pass">PASS</td><td>Only [a-z0-9-]</td></tr>
+<tr><td>name length (≤64)</td><td class="pass">PASS</td><td>11 chars</td></tr>
+<tr><td>name matches dir</td><td class="pass">PASS</td><td>name == dir</td></tr>
+<tr><td>description valid</td><td class="pass">PASS</td><td>Fits 1024 char limit</td></tr>
+<tr><td>description describes what + when</td><td class="pass">PASS</td><td>Describes facilitation + lists triggers</td></tr>
+<tr><td>description includes triggers</td><td class="pass">PASS</td><td>Triggers: design this, what's the tradeoff, etc.</td></tr>
+<tr><td>body valid markdown</td><td class="pass">PASS</td><td>Valid markdown</td></tr>
+<tr><td>step-by-step instructions</td><td class="partial">PARTIAL</td><td>Has numbered frameworks but no explicit quick-start sequence</td></tr>
+<tr><td>examples of inputs/outputs</td><td class="fail">FAIL</td><td>No concrete I/O example — only reference tables</td></tr>
+<tr><td>edge case handling</td><td class="pass">PASS</td><td>Boundaries section covers anti-patterns and redirects</td></tr>
+<tr><td>under 500 lines</td><td class="pass">PASS</td><td>68 lines</td></tr>
+<tr><td>metadata minimal</td><td class="pass">PASS</td><td>Only name + desc (~2 lines)</td></tr>
+<tr><td>instructions under 5000 tokens</td><td class="pass">PASS</td><td>Well under</td></tr>
+<tr><td>references used correctly</td><td class="pass">N/A</td><td>No references/ — appropriate at this scope</td></tr>
+<tr><td>no deep nested refs</td><td class="pass">PASS</td><td>None present</td></tr>
+  </tbody>
+</table>
+
+<h2>Best Practices</h2>
+<table>
+  <thead><tr><th>Guideline</th><th>Result</th><th>Detail</th></tr></thead>
+  <tbody>
+<tr><td>Based on real expertise</td><td class="pass">PASS</td><td>Named patterns: state machines, facade, dependency inversion</td></tr>
+<tr><td>Domain-specific context</td><td class="pass">PASS</td><td>Architecture tradeoffs, coupling patterns, rollback paths</td></tr>
+<tr><td>Input/output documented</td><td class="fail">FAIL</td><td>No explicit I/O format specification</td></tr>
+<tr><td>Refined from execution</td><td class="pass">PASS</td><td>Content feels practiced, not generic</td></tr>
+<tr><td>Agent-specific content</td><td class="pass">PASS</td><td>Agent-facing instructions, no generic fluff</td></tr>
+<tr><td>Coherent unit</td><td class="pass">PASS</td><td>Well-scoped design facilitation</td></tr>
+<tr><td>Moderate detail</td><td class="pass">PASS</td><td>Not sparse, not exhaustive</td></tr>
+<tr><td>Working example</td><td class="fail">FAIL</td><td>No concrete before/after demonstration</td></tr>
+<tr><td>Token efficient</td><td class="pass">PASS</td><td>Dense, no wasted explanation</td></tr>
+<tr><td>Explicit gotchas</td><td class="partial">PARTIAL</td><td>Boundaries section exists but could use explicit "avoid X when Y" gotchas</td></tr>
+<tr><td>Defaults provided</td><td class="pass">PASS</td><td>"Never: you should use X. Always: X gives you Y but costs Z."</td></tr>
+  </tbody>
+</table>
+
+<h2>Structure Comparison vs. Reference</h2>
+<table>
+  <thead><tr><th>Path</th><th>Present</th><th>Status</th></tr></thead>
+  <tbody>
+<tr><td>SKILL.md</td><td>YES</td><td class="pass">REQUIRED — found</td></tr>
+<tr><td>scripts/</td><td>NO</td><td class="pass">OPTIONAL — skip</td></tr>
+<tr><td>references/</td><td>NO</td><td class="pass">OPTIONAL — skip</td></tr>
+<tr><td>assets/</td><td>NO</td><td class="pass">OPTIONAL — skip</td></tr>
+<tr><td>evals/evals.json</td><td>NO</td><td class="warn">RECOMMENDED — missing</td></tr>
+  </tbody>
+</table>
+
+<h2>Warnings</h2>
+<ul class="warnings">
+<li>No explicit input/output format — agent doesn't know what to expect in the prompt or what to produce</li>
+<li>No working example — shows frameworks but never demonstrates a full run. Agent can't calibrate output quality.</li>
+<li>No evals/evals.json — cannot verify skill behavior programmatically</li>
+</ul>
+
+<h2>Actionable Fixes</h2>
+<ul class="fixes">
+<li><strong>High priority:</strong> Add a concrete worked example: paste a realistic design prompt → show expected skill output (tradeoff table + challenge questions). Put it right after the opening line.</li>
+<li><strong>High priority:</strong> Add a Quick Start section (3-5 numbered steps) as the first body content. Current jumps straight into methodology — agent needs to know the engagement flow.</li>
+<li><strong>Medium priority:</strong> Document expected input format (e.g., "paste design draft or architecture description") and output format (e.g., "tradeoff table + challenge questions + redirect verdict").</li>
+<li><strong>Low priority:</strong> Consider adding references/ with extended tradeoff patterns if this skill grows. Currently 68 lines — appropriately scoped.</li>
+</ul>
+
+<h2>Verdict</h2>
+<p><span class="warn" style="font-size:1.3rem; font-weight:700;">Grade: B-</span></p>
+<p>Solid skeleton. Frontmatter spec-clean. Body carries real design patterns (tradeoff matrix, assumption challenges, decision prompts). Missing: concrete worked example (critical — agents need to see the pattern), explicit quick-start sequence (critical — first thing agent reads), and input/output contract. The existing content is strong — it just needs the on-ramp. Add one worked example and 3-step intro, and this hits A.</p>
+
+<footer>
+  Generated by skill-check audit — agentskills.io spec v1 — 2026-05-29
+</footer>
+
+</body>
+</html>

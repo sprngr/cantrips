@@ -90,13 +90,6 @@ After each turn: show decision log, append to `.skill-plan.yaml`.
 9. Total instruction lines <= 80 (reserve 20 for frontmatter + headers)
 10. If step requires external tool, tool name is explicit
 
-### 4.5. Example (Calibration)
-* Generate end-to-end walkthrough of the skill in action. Match format in `references/Examples.md` §Full Walkthrough.
-* **Content:** Simulated transcript: user prompt → Turn 1 intent → Turn 2 scope → … → final output. Include at least one backtrack or anti-pattern catch.
-* **Placement:** Tier A → embed as `## Example` section inside SKILL.md. Tier B/C → write to `references/Example.md`.
-* Show example. Ask: "Example accurate? [yes / no / edit]"
-* Store `example_placed: inline | references/Example.md` + `example_generated: true` in plan.
-
 ### 5. Write (Synthesis)
 * Check target path. Warn on collision. Require explicit yes to overwrite.
 * Write all files via `Write` tool: SKILL.md, then `scripts/`, `references/` (including `Example.md` if Tier B/C), `assets/` per tier.

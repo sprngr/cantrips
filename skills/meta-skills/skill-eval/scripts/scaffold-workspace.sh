@@ -22,7 +22,7 @@ parse_evals() {
   if command -v jq &>/dev/null; then
     jq -r '.evals[] | @base64' "$EVALS_JSON" | while read -r encoded; do
       id=$(echo "$encoded" | base64 -d | jq -r '.id')
-      prompt=$(echo "$encoded" | base64 | base64 -d | jq -r '.prompt')
+      prompt=$(echo "$encoded" | base64 -d | jq -r '.prompt')
       # Create slug from first few words of prompt
       slug=$(echo "$prompt" | tr '[:upper:]' '[:lower:]' | tr -cs '[:alnum:]' '-' | head -c 40)
       echo "eval-${slug}-${id}"

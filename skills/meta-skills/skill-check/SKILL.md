@@ -38,8 +38,9 @@ scripts/validate-structure.sh path/to/target-skill
         has_evals: true/false,
         structure: { score, found: [string], warnings: [string] },
         fixes: [{priority, description}]
+      }
       ```
-8. Write filled report to `<skill-path>/skill-check-report.html`.
+8. Write filled report to `<skill-path>/<skill-name>-skill-check-report.html`.
 
 ## Reference files
 

@@ -61,6 +61,37 @@ When:
 
 If they can't, they haven't found the right question yet. Ask another.
 
+## Worked Example
+
+```
+Developer: "My auth middleware keeps returning 401. Here's the stack trace:
+  at AuthMiddleware (middleware/auth.ts:42)
+  at next (node_modules/express/lib/application.js:145)
+  at router.handle (node_modules/express/lib/router/index.js:66)"
+
+Agent: "What should happen here? What's the contract of that middleware?"
+
+Developer: "It reads the Bearer token from headers, validates it against the JWT secret,
+and adds the user to the request object."
+
+Agent: "What actually gets received? Show me what `req.headers` looks like on a 401."
+
+Developer: "req.headers is `{}`. The token isn't there."
+
+Agent: "So the client is sending the request — but no headers? Or are they stripped
+before they reach your app?"
+
+Developer: "Oh... Nginx strips Authorization headers unless I configure `proxy_set_header`."
+
+Agent: "So the gap — spec says middleware reads a header, but Nginx eats the header.
+Bug state: 'X is null because Y didn't call Z' format?"
+
+Developer: "Nginx drops the Authorization header before it reaches Express.
+I need proxy_set_header Authorization $http_authorization in the Nginx config."
+
+Agent: "That's your root cause."
+```
+
 ## Boundaries
 
 - Don't give the fix without the developer stating the problem first

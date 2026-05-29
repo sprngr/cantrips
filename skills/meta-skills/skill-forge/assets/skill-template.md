@@ -4,11 +4,15 @@ description: [What capability it provides in third person]. Use when [specific k
 ---
 # [Skill Name]
 
-## Quick start
-[Minimal working example. One code block only.]
+[Instructions for the agent to follow when this skill is activated.]
 
-## Workflows
+## When to use
+
+[Describe when this skill should be used.]
+
+## Instructions/Workflows
+
 [Numbered, imperative steps. Max 2 lines per step. One verb per step.]
 
-## Advanced features
+## References
 [Link to separate files: See [REFERENCE.md](references/REFERENCE.md)]
