@@ -1,0 +1,158 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Parsed Report Summary",
+  "description": "Schema for JSON summaries extracted from skill-check and skill-eval HTML reports",
+  "oneOf": [
+    { "$ref": "#/definitions/skill-check-report" },
+    { "$ref": "#/definitions/skill-eval-report" }
+  ],
+  "definitions": {
+    "skill-check-report": {
+      "type": "object",
+      "required": ["skill", "target_path", "audit_date", "grade", "spec", "best_practices", "structure"],
+      "properties": {
+        "skill": { "type": "string" },
+        "target_path": { "type": "string" },
+        "audit_date": { "type": "string" },
+        "grade": { "type": "string", "enum": ["A", "B", "C", "D", "F"] },
+        "spec": {
+          "type": "object",
+          "required": ["score", "total", "checks"],
+          "properties": {
+            "score": { "type": "integer", "minimum": 0 },
+            "total": { "type": "integer", "minimum": 0 },
+            "checks": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["check", "pass"],
+                "properties": {
+                  "check": { "type": "string" },
+                  "pass": { "type": "boolean" },
+                  "detail": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "best_practices": {
+          "type": "object",
+          "required": ["score", "total"],
+          "properties": {
+            "score": { "type": "integer", "minimum": 0 },
+            "total": { "type": "integer", "minimum": 0 },
+            "warnings": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "has_evals": { "type": "boolean" },
+        "structure": {
+          "type": "object",
+          "required": ["score"],
+          "properties": {
+            "score": { "type": "string" },
+            "found": { "type": "array", "items": { "type": "string" } },
+            "warnings": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "fixes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "priority": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "skill-eval-report": {
+      "type": "object",
+      "required": ["skill", "iteration", "report_date", "eval_count", "with_skill", "without_skill"],
+      "properties": {
+        "skill": { "type": "string" },
+        "iteration": { "type": "integer", "minimum": 1 },
+        "report_date": { "type": "string" },
+        "eval_count": { "type": "integer", "minimum": 0 },
+        "readiness": {
+          "type": "object",
+          "properties": {
+            "score": { "type": "integer" },
+            "total": { "type": "integer" },
+            "band": { "type": "string" }
+          }
+        },
+        "delta": {
+          "type": "object",
+          "properties": {
+            "pass_rate": { "type": "number" },
+            "tokens": { "type": "number" },
+            "time": { "type": "number" }
+          }
+        },
+        "with_skill": {
+          "type": "object",
+          "properties": {
+            "pass_rate": { "type": "number" },
+            "stddev": { "type": "number" },
+            "samples": { "type": "integer" },
+            "tokens": { "type": "number" },
+            "time": { "type": "number" }
+          }
+        },
+        "without_skill": {
+          "type": "object",
+          "properties": {
+            "pass_rate": { "type": "number" },
+            "stddev": { "type": "number" },
+            "samples": { "type": "integer" },
+            "tokens": { "type": "number" },
+            "time": { "type": "number" }
+          }
+        },
+        "evals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "pass_rate": { "type": "number" },
+              "assertions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "pass": { "type": "boolean" },
+                    "evidence": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "patterns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string" },
+              "count": { "type": "integer" },
+              "action": { "type": "string" }
+            }
+          }
+        },
+        "fixes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "priority": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

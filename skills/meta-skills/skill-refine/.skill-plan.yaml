@@ -1,0 +1,71 @@
+# .skill-plan.yaml — skill-refine
+version: 1
+completed: true
+
+intent: >
+  Iteratively improve existing agent skills by consuming structured feedback
+  (skill-eval reports, skill-check reports, user guidance) and producing
+  ranked plan patches with human-in-the-loop approval per round.
+
+scope: extended
+tier: C
+mechanism: hybrid
+
+context_assets:
+  - schema      # JSON schema for skill-eval and skill-check report formats
+  - checklists  # Priority ranking rules (spec violations > failing evals > style nits)
+  - templates   # Patch proposal format, patch artifact template, changelog format
+
+target_path: /mnt/f/workspace/cantrips/skills/meta-skills/skill-refine/
+
+triggers:
+  - "refine skill"
+  - "improve plan"
+  - "patch plan"
+  - "apply eval feedback"
+  - "/skill-refine"
+
+workflow_notes:
+  pipeline:
+    - step: Read
+      output: parsed findings list
+      detail: Scripts parse JSON summaries from skill-eval/skill-check reports
+    - step: Rank
+      output: prioritized patch queue
+      detail: AI ranks by severity (spec violations > failing evals > style nits)
+    - step: Patch
+      output: .skill-plan.patch.yaml + .skill-plan.patched.yaml
+      detail: Propose plan-only operations with user approval gates
+    - step: Validate
+      output: forge-compatible patched plan
+      detail: Validate required fields/enums/completed=true before handoff
+  gates:
+    - between: Rank → Patch
+      type: user-approval
+    - between: Patch → Validate
+      type: user-approval
+  roles:
+    - user (approver, trigger controller)
+  editing_scope: .skill-plan.yaml only
+  outputs:
+    - .skill-plan.patch.yaml
+    - .skill-plan.patched.yaml
+
+example_placed: references/Example.md
+example_generated: true
+
+coverage:
+  essential_schema:
+    intent: true
+    scope: true
+    mechanism: true
+    context_assets: true
+    tier: true
+    target_path: true
+    workflow_notes: true
+    example_placed: true
+    example_generated: true
+  unanswered_branches: []
+
+turns: 8
+last_backtrack_turn: null

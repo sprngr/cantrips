@@ -1,4 +1,4 @@
-# .skill-plan.yaml - Auto-generated interview state
+# .skill-plan.yaml - Completed planning artifact consumed by skill-forge
 intent: "Create & run skill evaluations per agentskills.io eval spec. Full lifecycle: test case authoring, dual-run execution, assertion grading, benchmark aggregation, pattern analysis, improvement handoff to skill-forge."
 scope: "extended"
 mechanism: "hybrid"

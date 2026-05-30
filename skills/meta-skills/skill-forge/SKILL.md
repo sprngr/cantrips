@@ -1,70 +1,73 @@
 ---
 name: skill-forge
 description: >
-  Interactive wizard that interviews the user to build a spec-compliant
-  agentskills.io skill bundle: SKILL.md, scripts, assets, and references.
-  Use when the user wants to create a new skill, or invokes /skill-forge.
+  Generator that compiles a spec-compliant agentskills.io skill bundle from a
+  completed `.skill-plan.yaml`. Runs draft validation and writes SKILL.md,
+  scripts, assets, and references.
+  Use when the user provides a completed plan, or invokes /skill-forge.
 ---
 
-Guide the user from a raw concept to a compiled, schema-compliant skill bundle via a branching dialogue tree.
+Compile a completed `.skill-plan.yaml` into a final, schema-compliant skill bundle.
+Do not run discovery interview loops inside skill-forge.
 
 ## Core Concepts
-* **Progressive Disclosure:** One focal question per turn.
-* **State Memory:** Persist decision log to `[target]/.skill-plan.yaml` (schema: `assets/plan-template.yaml`). Resume survives drop.
-* **Backtrack:** "back"/"undo"/contradiction → invalidate fork + downstream → re-prompt from fork point.
-* **Uncertainty:** If user stuck, offer 2-3 starter templates. Let them pick.
+* **Plan as Source of Truth:** `.skill-plan.yaml` drives all generation decisions.
+* **Generation-Only Contract:** Discovery happens in skill-wizard + skill-plan.
+* **Human Write Gate:** Always require explicit confirmation before writing files.
+* **Draft Quality Gate:** Enforce anti-pattern and clarity checks before synthesis.
 
 ## State Machine
 
-### 0. Import (If Triggered)
-* **Turn tracking rule:** Ignore pre-filled fields (scope/mechanism/context/path). Only `turns[]` length determines progress.
-* Auto-trigger: User says "continue skill" OR names a path containing `.skill-plan.yaml`.
+### 0. Import Plan (Required)
+* Auto-trigger: User provides a path containing `.skill-plan.yaml` or asks to forge from plan.
 * **Action:**
   1. Run `Bash scripts/import-plan.sh <plan-path>` from skill directory.
-  2. Parse KEY=VALUE output. Map `TURNS` → resume turn (TURNS=1 → resume Turn 2, TURNS=2 → resume Turn 3, etc.). If `TURNS=0`, start at Turn 1.
-  3. If exit code 4 (`COMPLETED=true`), print summary, say "Skill already complete. Re-forge?", exit if no.
-  4. If exit code 3 (missing keys), warn user, print fields still available, ask if they want to continue from here.
-  5. Print summary: intent, tier, turns completed, target path. Ask: "Resume interview? (yes/no)"
+  2. Parse KEY=VALUE output into working state (intent, tier, mechanism, target path, notes).
+  3. Handle non-zero exits:
+     - `1`: plan file missing/unreadable → ask for valid path.
+     - `2`: YAML parse/shape error → ask user to repair plan YAML.
+     - `3`: required keys missing → list missing keys, ask user to patch via skill-plan/skill-refine.
+     - `4`: `completed` is not `true` → stop and ask user to complete planning first.
+  4. Print summary: intent, scope, mechanism, tier, target path.
+  5. Ask: `Proceed to generate bundle? [yes/no]`
 
-### 1. Onboarding (Intent)
-* Greet with RPG-flavored welcome (see `references/Examples.md` §Initialization).
-* Ask: Define the skill's core intent or "superpower."
-* **Constraint:** Block all other questions until intent is set.
-* Save to `.skill-plan.yaml` → persist.
+### 1. Blueprint (Verification)
+* Build file plan from plan fields (`tier`, `mechanism`, `context_assets`, `workflow_notes`).
+* Show projected directory tree + 3-line SKILL.md preview.
+* Ask confirmation.
+* If user requests structural changes (intent/scope/mechanism/context/path/workflow), do **not** interview or mutate plan inline.
+  - Instruct user to patch `.skill-plan.yaml` via skill-refine (or rerun skill-wizard/skill-plan), then rerun skill-forge.
 
-### 2. Branching (Turns 2–5)
-* **Turn 2 (Scope):** Single task | moderate pipeline (2–5 steps) | extended orchestration. Maps to Tier A / B / C.
-* **Turn 3 (Mechanism):** Default: [A] AI reasoning (most skills start here). Offer [B] scripts or [C] hybrid only if intent implies scripting. Flags `scripts/` if B or C.
-* **Turn 4 (Context):** Static assets? JSON schema? Prompt templates? Checklists? Manifolds? Flags `references/` if yes.
-* **Turn 5 (Target Path):** Where to save? If path exists with same-skill name, warn + propose rename. Require explicit yes.
+### 2. Draft (Quality Gate)
+* Draft SKILL.md instructions using `assets/skill-template.md` as skeleton.
+* Generate draft files for `scripts/`, `references/`, and `assets/` based on tier and mechanism.
+* Scan draft against anti-patterns below. Print violations to user. Fix internally.
+* **Conditional push rule:** If conditional wall cannot be flattened, push logic to `scripts/`. Replace SKILL.md step with one script call. Record change in `draft_changes[]`.
+* Run draft against clarity checklist below. Print remaining failures. Fix internally.
+* Show corrected draft. Ask: `Write to disk or adjust?`
+* If requested adjustment changes plan semantics, stop and route user to patch plan upstream.
 
-After each turn: show decision log, append to `.skill-plan.yaml`.
-
-### 3. Blueprint (Verification)
-* Show: directory tree for selected tier + 3-line SKILL.md preview with real intent filled in.
-* Ask confirmation. Corrections → apply backtrack rules.
-* Then ask: "Any workflow steps to add, remove, or reorder?" Store as `workflow_notes[]` in plan.
-* If refinement changes scope/mechanism → trigger backtrack to Turns 2–3.
-
-### 4. Draft (Quality Gate)
-* Draft SKILL.md instructions. Use `assets/skill-template.md` as skeleton.
-* Scan draft against the anti-patterns below. Print violations to user. Fix internally.
-* **Conditional push rule:** Anti-pattern flags conditional logic that won't flatten → push logic into `scripts/`. Replace SKILL.md step with single script call. Update file plan + `draft_changes[]` in plan.
-* Run draft against the clarity checklist below. Print remaining failures. Fix internally.
-* Show corrected draft. Ask: "Write to disk or adjust?"
-
-### 4.5. Example (Calibration)
-* Generate end-to-end example showing the skill in action. Format: simulated transcript of user prompt → agent Turn 1 → Turn 2 → … → final output.
-* **Placement rule:** If Tier A (SKILL.md only), embed example as `## Example` section inside SKILL.md. If Tier B or C, write to `references/Example.md`.
+### 3. Example (Calibration)
+* Generate end-to-end example showing generated skill behavior in use.
+* **Placement rule:** Tier A → embed as `## Example` inside SKILL.md. Tier B/C → write to `references/Example.md`.
 * **Content rules:**
-  - Show realistic user input matching the `Use when` triggers from frontmatter.
-  - Walk through every workflow step the SKILL.md defines.
-  - Include at least one edge case or correction (backtrack, conditional push, refinement).
-  - End with the concrete output the skill produces.
-  - Add `### Agent-calibration notes` block: tone, pacing, anti-pattern catches, output shape.
-* **Reference:** See `references/Examples.md` §Full Walkthrough for format model.
-* Ask: "Example looks good? [yes / no / edit]"
-* Persist example path + `example_generated: true` to `.skill-plan.yaml`.
+  - Use realistic user input matching frontmatter triggers.
+  - Walk through each workflow step from generated SKILL.md.
+  - Include at least one edge case or correction (e.g., conditional push, validation failure).
+  - End with concrete output produced by the generated skill.
+  - Add `### Agent-calibration notes` block (tone, pacing, output shape).
+* Ask: `Example looks good? [yes / no / edit]`
+* Persist `example_placed` + `example_generated: true` in plan.
+
+### 4. Write (Synthesis)
+* Check target path. Warn on collision. Require explicit yes to overwrite.
+* Write files via `Write` tool: SKILL.md, then `scripts/`, `references/` (including `Example.md` if Tier B/C), `assets/` per tier.
+* Update `.skill-plan.yaml` metadata:
+  - append `draft_changes[]` from quality gate
+  - set `example_placed`
+  - set `example_generated: true`
+  - keep `completed: true`
+* Say: `Skill forged.`
 
 #### Gotchas: Anti-Patterns (enforce during drafting)
 * ❌ "Consider doing X" → Replace with "Do X."
@@ -76,7 +79,7 @@ After each turn: show decision log, append to `.skill-plan.yaml`.
 * ❌ "See below/above" → Use file paths or section headers.
 * ❌ Conditional walls → Push logic into `scripts/`. Replace step with script call.
 * ❌ Repeating frontmatter in body → Delete. Description belongs in YAML only.
-* ❌ Open-ended tasks → Add scope: "search files matching *.ts."
+* ❌ Open-ended tasks → Add concrete scope constraint.
 
 #### Clarity Checklist (pass all before write)
 1. Every instruction is imperative verb-first ("Read", "Generate", "Call")
@@ -86,15 +89,9 @@ After each turn: show decision log, append to `.skill-plan.yaml`.
 5. Each step has a single verb. No compound actions.
 6. File references use relative paths from skill root
 7. No vague instruction without a scope constraint
-8. Output expectations stated per step ("produce a JSON object with keys...")
+8. Output expectations stated per step ("produce JSON with keys...")
 9. Total instruction lines <= 80 (reserve 20 for frontmatter + headers)
 10. If step requires external tool, tool name is explicit
-
-### 5. Write (Synthesis)
-* Check target path. Warn on collision. Require explicit yes to overwrite.
-* Write all files via `Write` tool: SKILL.md, then `scripts/`, `references/` (including `Example.md` if Tier B/C), `assets/` per tier.
-* Finalize `.skill-plan.yaml` → set `completed: true`.
-* Say: "Skill forged."
 
 ### Tier Output Map
 | Tier | Output |
@@ -105,5 +102,5 @@ After each turn: show decision log, append to `.skill-plan.yaml`.
 
 ## Reference Files
 * `assets/skill-template.md` — SKILL.md skeleton for generated skills
-* `assets/plan-template.yaml` — `.skill-plan.yaml` schema
-* `references/Examples.md` — Prompt examples for each state
+* `assets/plan-template.yaml` — `.skill-plan.yaml` input contract
+* `references/Examples.md` — Generation-phase prompt examples

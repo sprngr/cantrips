@@ -1,4 +1,4 @@
-# .skill-plan.yaml - Completed planning artifact consumed by skill-forge
+# .skill-plan.yaml - Planning state artifact produced by skill-wizard
 intent: "[core capability statement]"
 scope: "[single | moderate | extended]"
 mechanism: "[reasoning | scripts | hybrid]"
@@ -6,27 +6,27 @@ context_assets: "[none | schema | templates | checklists | manuals]"
 target_path: "[workspace-relative path ending with /]"
 tier: "[A | B | C]"
 workflow_notes:
-  - "[step -> script|AI -> output]"
+  - "[step -> script|AI -> output or planning constraint]"
 turns:
   - turn: 1
     question: "[what was asked]"
     answer: "[user answer]"
     timestamp: "ISO-8601"
 draft_changes:
-  - "[changes introduced during forge draft gate, if any]"
+  - "[forge-added draft note, optional]"
 example_placed: "[inline | references/Example.md]"
 example_generated: false
-completed: true
+completed: false
 coverage:
   essential_schema:
-    intent: true
-    scope: true
-    mechanism: true
-    context_assets: true
-    tier: true
-    target_path: true
-    workflow_notes: true
-    example_placed: true
-    example_generated: true
+    intent: false
+    scope: false
+    mechanism: false
+    context_assets: false
+    tier: false
+    target_path: false
+    workflow_notes: false
+    example_placed: false
+    example_generated: false
   unanswered_branches: []
 last_backtrack_turn: null
