@@ -3,8 +3,8 @@
 - **Date:** 2026-05-30
 - **Scope:** ADR-0002 Task 5 final verification and evidence summary
 - **Related artifacts:**
-  - `reports/skill-plan-audit-baseline.md`
-  - `reports/skill-plan-audit-after.md`
+  - `docs/reports/skill-plan-audit-baseline.md`
+  - `docs/reports/skill-plan-audit-after.md`
   - `docs/adr/0002-implementation-plan.md`
 
 ## Commands Executed

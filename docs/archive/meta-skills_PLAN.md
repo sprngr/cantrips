@@ -55,4 +55,4 @@ skill-plan and skill-wizard agent have been deployed. Before continuing buildout
 | skill-forge | Generate + validate from yaml |
 | skill-check | Audit against spec → report |
 | skill-eval | Test & benchmark → logs |
-| skill-refine | Patch yaml from reports/user input |
+| skill-refine | Patch yaml from docs/reports/user input |

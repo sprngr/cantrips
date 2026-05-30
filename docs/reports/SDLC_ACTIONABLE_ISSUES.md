@@ -140,7 +140,7 @@ Meta-skills that enforce quality are not fully quality-benchmarked themselves.
 No single view of skill health (tests/evals/checks/plan contract).
 
 **Scope**
-- Create generated markdown or JSON summary (e.g. `reports/skills-quality-summary.md`)
+- Create generated markdown or JSON summary (e.g. `docs/reports/skills-quality-summary.md`)
 - Include per-skill: has plan, has evals, latest check status, latest eval status
 
 **Acceptance Criteria**

@@ -194,7 +194,7 @@ Provide portfolio-wide visibility into readiness.
 - CI and eval presence work from #1/#3
 
 **Work Plan**
-1. Add report-generation script (`reports/` output)
+1. Add report-generation script (`docs/reports/` output)
 2. Include: plan conformance, eval presence, latest check/eval artifacts
 3. Wire into CI and README
 

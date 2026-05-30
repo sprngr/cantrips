@@ -25,3 +25,4 @@ This directory tracks durable decisions for skills/meta-skills SDLC, quality gat
 
 - [ADR-0002 Implementation Plan](./0002-implementation-plan.md)
 - [ADR-0003 Implementation Plan](./0003-implementation-plan.md)
+- [ADR-0004 Implementation Plan](./0004-implementation-plan.md)

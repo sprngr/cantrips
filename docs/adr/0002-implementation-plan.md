@@ -48,7 +48,7 @@ Execute ADR-0002 by normalizing all tracked `.skill-plan.yaml` files to canonica
 - [ ] Enumerate all tracked `.skill-plan.yaml` files
 - [ ] Capture current values for: `target_path`, `context_assets`, `workflow_notes` type
 - [ ] Classify violations by rule category
-- [ ] Save report to `reports/skill-plan-audit-baseline.md` (or JSON equivalent)
+- [ ] Save report to `docs/reports/skill-plan-audit-baseline.md` (or JSON equivalent)
 
 **Acceptance**
 - [ ] Report lists each non-conforming file and exact violation(s)
@@ -141,7 +141,7 @@ Execute ADR-0002 by normalizing all tracked `.skill-plan.yaml` files to canonica
 - [ ] Run legacy validator across all plans
 - [ ] Run strict audit script across all plans
 - [ ] Regenerate final migration report:
-      `reports/skill-plan-audit-after.md`
+      `docs/reports/skill-plan-audit-after.md`
 - [ ] Include before/after counts by violation type
 - [ ] Prepare PR checklist and evidence snippets
 
@@ -153,13 +153,13 @@ Execute ADR-0002 by normalizing all tracked `.skill-plan.yaml` files to canonica
 > Adjust command paths if scripts move during implementation.
 
 1. Baseline list:
-   - `python3 scripts/audit-skill-plans.py --format markdown > reports/skill-plan-audit-baseline.md`
+   - `python3 scripts/audit-skill-plans.py --format markdown > docs/reports/skill-plan-audit-baseline.md`
 2. Legacy validator pass:
    - loop all `.skill-plan.yaml` through `skills/meta-skills/skill-refine/scripts/validate-plan.sh`
 3. Strict audit pass:
    - `python3 scripts/audit-skill-plans.py --fail-on-violation`
 4. Post-migration report:
-   - `python3 scripts/audit-skill-plans.py --format markdown > reports/skill-plan-audit-after.md`
+   - `python3 scripts/audit-skill-plans.py --format markdown > docs/reports/skill-plan-audit-after.md`
 
 ## Risks and Mitigations
 
@@ -179,7 +179,7 @@ Execute ADR-0002 by normalizing all tracked `.skill-plan.yaml` files to canonica
 
 - [ ] Team agrees on deterministic rewrite policy
 - [ ] Team agrees on strict-vs-permissive validator split
-- [ ] Team agrees on report artifact location (`reports/`)
+- [ ] Team agrees on report artifact location (`docs/reports/`)
 - [ ] Team agrees this plan ships in PR2 scope
 
 ## Approval

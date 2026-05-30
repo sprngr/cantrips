@@ -90,7 +90,7 @@ Metric subobject contract (`with_skill`, `without_skill`):
 
 ## Completion Note (2026-05-30)
 
-- Task 1 baseline completed (`reports/adr-0003-contract-baseline.md`).
+- Task 1 baseline completed (`docs/reports/adr-0003-contract-baseline.md`).
 - Task 2 schema tightening completed (iteration string-only, metric keys required).
 - Task 3 parser hardening completed (machine-block first + legacy fallback with extraction mode telemetry).
 - Task 4 documentation alignment completed (contract rule noted in `skill-eval/SKILL.md`).

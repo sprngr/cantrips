@@ -45,10 +45,10 @@ Stabilize `skill-eval` machine-readable JSON summary contract and ensure report 
 - [x] Inspect current `skill-eval` report template + emitted JSON samples
 - [x] Inspect `report-schema.json` eval definition
 - [x] Record mismatches vs ADR-0003 required/recommended fields
-- [x] Write short inventory note to `reports/adr-0003-contract-baseline.md`
+- [x] Write short inventory note to `docs/reports/adr-0003-contract-baseline.md`
 
 **Completion Note (2026-05-30)**
-- Baseline report created: `reports/adr-0003-contract-baseline.md`
+- Baseline report created: `docs/reports/adr-0003-contract-baseline.md`
 - Single mismatch identified: schema currently permits integer `iteration`; ADR-0003 canonical contract prefers `iteration-N` string only.
 
 ---
@@ -146,13 +146,13 @@ Stabilize `skill-eval` machine-readable JSON summary contract and ensure report 
 - [x] Run parse-report test suite
 - [x] Run full meta-skill tests for regression confidence
 - [x] Validate sample eval summary against schema
-- [x] Produce `reports/adr-0003-pr-evidence.md` with command list + outcomes
+- [x] Produce `docs/reports/adr-0003-pr-evidence.md` with command list + outcomes
 
 **Acceptance**
 - [x] Evidence report created and linked in PR
 
 **Completion Note (2026-05-30)**
-- Evidence report created: `reports/adr-0003-pr-evidence.md`
+- Evidence report created: `docs/reports/adr-0003-pr-evidence.md`
 - Focused parser tests and full meta-skill regression suites passed.
 - Canonical sample validated successfully against updated schema.
 

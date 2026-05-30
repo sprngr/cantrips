@@ -67,6 +67,15 @@ def detect_report_type(data: dict) -> str:
     return "unknown"
 
 
+def should_require_machine_block(report_type: str) -> bool:
+    """Return whether report type requires machine-block extraction.
+
+    ADR-0004 policy: skill-check reports require machine block.
+    Legacy fallback remains available for other report types.
+    """
+    return report_type == "skill-check"
+
+
 def flatten_findings(data: dict, report_type: str) -> list[dict]:
     """Extract individual findings from parsed report JSON."""
     findings = []
@@ -149,6 +158,14 @@ def main():
         sys.exit(1)
 
     report_type = detect_report_type(data)
+    if should_require_machine_block(report_type) and extraction_mode != "machine":
+        print(json.dumps({
+            "error": "Skill-check JSON summary must be extracted from machine-report block",
+            "report_type": report_type,
+            "extraction_mode": extraction_mode,
+        }))
+        sys.exit(1)
+
     findings = flatten_findings(data, report_type)
 
     output = {
