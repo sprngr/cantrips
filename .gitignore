@@ -4,3 +4,7 @@ skills-lock.json
 # Ignore test output
 *-eval-workspace/
 *-skill-check-report.html
+
+# Python
+__pycache__/
+*.py[codz]

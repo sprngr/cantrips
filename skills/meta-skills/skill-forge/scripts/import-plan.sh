@@ -2,9 +2,15 @@
 # import-plan.sh — validate + extract completed .skill-plan.yaml for generation
 # Requires: python3, PyYAML
 # Usage: ./import-plan.sh <path-to-.skill-plan.yaml>
-# Exit: 0=ok, 1=missing file, 2=bad yaml, 3=missing/invalid keys, 4=incomplete plan
+# Output: JSON object with normalized plan fields
+# Exit: 0=ok, 1=usage/missing file, 2=bad yaml, 3=missing/invalid keys, 4=incomplete plan
 
 set -euo pipefail
+
+if [ "$#" -ne 1 ]; then
+  echo "Usage: $0 <path-to-.skill-plan.yaml>" >&2
+  exit 1
+fi
 
 PLAN="$1"
 
@@ -14,6 +20,7 @@ if [ ! -f "$PLAN" ] || [ ! -r "$PLAN" ]; then
 fi
 
 exec python3 - "$PLAN" <<'PYEOF'
+import json
 import sys
 
 try:
@@ -25,7 +32,7 @@ except ImportError:
 plan_path = sys.argv[1]
 
 try:
-    with open(plan_path, "r") as f:
+    with open(plan_path, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f)
 except Exception as e:
     print(f"ERROR: bad YAML: {e}", file=sys.stderr)
@@ -102,14 +109,18 @@ elif workflow_notes is None:
 else:
     notes = str(workflow_notes)
 
-print(f"INTENT={data['intent']}")
-print(f"SCOPE={scope}")
-print(f"MECHANISM={mechanism}")
-print(f"CONTEXT_ASSETS={context_assets_out}")
-print(f"TIER={tier}")
-print(f"TARGET_PATH={target_path}")
-print(f"TURNS={turn_count}")
-print("COMPLETED=true")
+payload = {
+    "intent": data["intent"],
+    "scope": scope,
+    "mechanism": mechanism,
+    "context_assets": context_assets_out,
+    "tier": tier,
+    "target_path": target_path,
+    "turns": turn_count,
+    "completed": True,
+}
 if notes:
-    print(f"WORKFLOW_NOTES={notes}")
+    payload["workflow_notes"] = notes
+
+print(json.dumps(payload, ensure_ascii=False))
 PYEOF

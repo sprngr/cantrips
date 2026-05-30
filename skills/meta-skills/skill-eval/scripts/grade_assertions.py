@@ -48,6 +48,9 @@ def check_count(text: str, output_dir: str) -> tuple[bool, str]:
 def check_contains(text: str, output_dir: str) -> tuple[bool, str]:
     """Check if output contains expected text."""
     targets = re.findall(r"['\"]([^'\"]+)['\"]", text)
+    if not targets:
+        return False, "No quoted target terms found in assertion"
+
     combined = ""
     for f in glob.glob(os.path.join(output_dir, "*")):
         if os.path.isfile(f):
@@ -57,7 +60,7 @@ def check_contains(text: str, output_dir: str) -> tuple[bool, str]:
             except OSError:
                 pass
     found = any(t.lower() in combined.lower() for t in targets)
-    return found or len(combined) > 10, f"Scanned {len(combined)} chars. Target terms {'found' if found else 'not confirmed'}"
+    return found, f"Scanned {len(combined)} chars. Target terms {'found' if found else 'not found'}"
 
 
 def classify_assertion(text: str) -> str:
@@ -67,10 +70,10 @@ def classify_assertion(text: str) -> str:
         return "file_exists"
     if any(w in lower for w in ["valid json", "json valid", "parseable json"]):
         return "valid_json"
-    if any(w in lower for w in ["count", "at least", "contains", "has", "number", "exactly"]):
-        return "count"
     if any(w in lower for w in ["includes", "contains", "mentions", "label", "labeled", "has"]):
         return "contains"
+    if any(w in lower for w in ["count", "at least", "contains", "has", "number", "exactly"]):
+        return "count"
     return "pending"
 
 

@@ -22,7 +22,21 @@ if [[ -z "$SKILL_MD" ]]; then
 fi
 
 RESULTS=()
-add() { RESULTS+=("{\"check\":\"$1\",\"pass\":$2,\"detail\":\"$3\"}"); }
+json_result() {
+    python3 - "$1" "$2" "$3" <<'PY'
+import json
+import sys
+
+check = sys.argv[1]
+passed = sys.argv[2].lower() == "true"
+detail = sys.argv[3]
+print(json.dumps({"check": check, "pass": passed, "detail": detail}))
+PY
+}
+
+add() {
+    RESULTS+=("$(json_result "$1" "$2" "$3")")
+}
 
 # 1. SKILL.md exists
 add "SKILL.md_exists" true "Found $(basename "$SKILL_MD") at $SKILL_DIR"
@@ -36,7 +50,8 @@ else
 fi
 
 # 3. Frontmatter closes
-if grep -q '^---' "$SKILL_MD" | head -2 | tail -1 > /dev/null 2>&1; then
+DELIM_COUNT=$(grep -c '^---' "$SKILL_MD" || true)
+if (( DELIM_COUNT >= 2 )); then
     add "frontmatter_closes" true "Frontmatter closing --- found"
 else
     add "frontmatter_closes" false "Frontmatter not properly closed with ---"
@@ -129,10 +144,9 @@ if echo "$YAML_BLOCK" | grep -q '^compatibility:'; then
 fi
 
 # Output JSON array
-echo "["
+printf "[\n"
 for i in "${!RESULTS[@]}"; do
-    [[ $i -gt 0 ]] && echo ","
+    [[ $i -gt 0 ]] && printf ",\n"
     printf "  %s" "${RESULTS[$i]}"
 done
-echo ""
-echo "]"
+printf "\n]\n"

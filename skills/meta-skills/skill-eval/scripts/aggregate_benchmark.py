@@ -11,11 +11,12 @@ import sys
 import os
 import glob
 import math
+from pathlib import Path
 
 
 def load_json_files(pattern: str) -> list[dict]:
     results = []
-    for path in glob.glob(pattern):
+    for path in glob.glob(pattern, recursive=True):
         try:
             with open(path) as f:
                 results.append(json.load(f))
@@ -100,10 +101,10 @@ def main():
 
     benchmark = {
         "iteration": os.path.basename(iter_dir),
-        "eval_count": len(set(
-            os.path.dirname(g).split("/")[-2]
-            for g in glob.glob(os.path.join(iter_dir, "**/grading.json"))
-        )),
+        "eval_count": len({
+            Path(g).parents[1].name
+            for g in glob.glob(os.path.join(iter_dir, "**/grading.json"), recursive=True)
+        }),
         "run_summary": {
             "with_skill": with_metrics,
             "without_skill": without_metrics,

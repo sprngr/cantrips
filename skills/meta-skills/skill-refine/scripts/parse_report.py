@@ -10,16 +10,16 @@ import json
 import re
 import sys
 import os
+import html
 
 
-def extract_json_from_html(html: str) -> dict | None:
+def extract_json_from_html(html_text: str) -> dict | None:
     """Find first <pre> block and parse its JSON content."""
-    match = re.search(r"<pre[^>]*>(.*?)</pre>", html, re.DOTALL)
+    match = re.search(r"<pre[^>]*>(.*?)</pre>", html_text, re.DOTALL)
     if not match:
         return None
     raw = match.group(1).strip()
-    # Strip HTML entities
-    raw = raw.replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&")
+    raw = html.unescape(raw)
     try:
         return json.loads(raw)
     except json.JSONDecodeError:
@@ -108,10 +108,10 @@ def main():
         print(json.dumps({"error": f"File not found: {report_path}"}))
         sys.exit(1)
 
-    with open(report_path, errors="ignore") as f:
-        html = f.read()
+    with open(report_path, "r", encoding="utf-8") as f:
+        html_text = f.read()
 
-    data = extract_json_from_html(html)
+    data = extract_json_from_html(html_text)
     if data is None:
         print(json.dumps({"error": "No JSON summary found in <pre> block"}))
         sys.exit(1)

@@ -22,7 +22,7 @@ Do not run discovery interview loops inside skill-forge.
 * Auto-trigger: User provides a path containing `.skill-plan.yaml` or asks to forge from plan.
 * **Action:**
   1. Run `Bash scripts/import-plan.sh <plan-path>` from skill directory.
-  2. Parse KEY=VALUE output into working state (intent, tier, mechanism, target path, notes).
+  2. Parse JSON output into working state (intent, tier, mechanism, target path, notes).
   3. Handle non-zero exits:
      - `1`: plan file missing/unreadable → ask for valid path.
      - `2`: YAML parse/shape error → ask user to repair plan YAML.

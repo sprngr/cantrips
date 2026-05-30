@@ -9,7 +9,7 @@ set -euo pipefail
 SKILL_DIR="${1:?Usage: compare-structure.sh <skill-path>}"
 
 if [[ ! -d "$SKILL_DIR" ]]; then
-    echo '{"error":"'$SKILL_DIR' is not a directory"}'
+    jq -n --arg err "$SKILL_DIR is not a directory" '{error:$err}'
     exit 1
 fi
 
@@ -65,8 +65,8 @@ if [[ -n "$SKILL_MD" ]]; then
     fi
 fi
 
-# Calculate score: +1 per found optional dir, -1 per warning
-SCORE=$(( ${#FOUND_DIRS[@]} - ${#MISSING[@]} * 2 ))
+# Calculate score: +1 per found optional dir, -2 per required miss, -1 per warning
+SCORE=$(( ${#FOUND_DIRS[@]} - ${#MISSING[@]} * 2 - ${#WARNINGS[@]} ))
 (( SCORE < 0 )) && SCORE=0
 (( SCORE > 10 )) && SCORE=10
 
