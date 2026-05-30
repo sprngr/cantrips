@@ -64,6 +64,7 @@ The agent authors 3-5 test cases, scaffolds a workspace, runs with-skill and wit
         fixes: [{ priority, description }]
       }
       ```
+      Contract rule: `iteration` must be string in form `iteration-N` (e.g., `iteration-5`).
 21. Write report to `<target-skill>/<skill-name>-iteration-N-eval-report.html`.
 
 ### 6. Analyze patterns

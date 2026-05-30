@@ -5,7 +5,7 @@ Usage examples:
   python3 scripts/audit-skill-plans.py
   python3 scripts/audit-skill-plans.py --format json
   python3 scripts/audit-skill-plans.py --fail-on-violation
-  python3 scripts/audit-skill-plans.py --files skills/squash/.skill-plan.yaml
+  python3 scripts/audit-skill-plans.py --files skills/experimental/squash/.skill-plan.yaml
 
 Contract enforced from ADR-0002 (write-strict profile):
   - target_path is string, starts with skills/, ends with /, no leading /, no .. segments
@@ -13,6 +13,9 @@ Contract enforced from ADR-0002 (write-strict profile):
   - workflow_notes is list[str]
   - coverage.essential_schema contains required boolean keys
   - coverage.unanswered_branches is array
+
+Optional advisory warning:
+  - experimental skills should live under skills/experimental/<skill>/
 """
 
 from __future__ import annotations
@@ -65,17 +68,11 @@ def repo_root() -> Path:
     return Path.cwd()
 
 
-def tracked_plan_files(root: Path) -> list[Path]:
-    result = subprocess.run(
-        ["git", "ls-files", "**/.skill-plan.yaml"],
-        cwd=root,
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-    if result.returncode != 0:
+def discovered_plan_files(root: Path) -> list[Path]:
+    skills_root = root / "skills"
+    if not skills_root.is_dir():
         return []
-    return [root / line.strip() for line in result.stdout.splitlines() if line.strip()]
+    return sorted(skills_root.rglob(".skill-plan.yaml"))
 
 
 def violation(code: str, detail: str) -> dict[str, str]:
@@ -90,7 +87,7 @@ def audit_plan(path: Path, root: Path) -> dict[str, Any]:
             rel = str(path)
     else:
         rel = str(path)
-    output: dict[str, Any] = {"file": rel, "status": "ok", "violations": []}
+    output: dict[str, Any] = {"file": rel, "status": "ok", "violations": [], "warnings": []}
 
     try:
         raw = path.read_text(encoding="utf-8")
@@ -123,6 +120,17 @@ def audit_plan(path: Path, root: Path) -> dict[str, Any]:
         if ".." in target_path.split("/"):
             output["violations"].append(
                 violation("target_path_parent_traversal", "target_path must not contain '..' segments")
+            )
+
+    # experimental convention warning (advisory, non-failing)
+    skill_dir_name = Path(rel).parent.name
+    if skill_dir_name in {"goblin-mode", "squash"} and "skills/experimental/" not in rel:
+        if isinstance(target_path, str) and not target_path.startswith("skills/experimental/"):
+            output["warnings"].append(
+                violation(
+                    "experimental_path_convention",
+                    "experimental skill should target skills/experimental/<skill>/",
+                )
             )
 
     # enum rules
@@ -181,11 +189,13 @@ def render_human(payload: dict[str, Any]) -> str:
     lines: list[str] = []
     summary = payload["summary"]
     counts = payload["violation_counts"]
+    warning_counts = payload["warning_counts"]
 
     lines.append("Skill-plan strict audit")
     lines.append(f"Files audited: {summary['total_files']}")
     lines.append(f"Files with violations: {summary['files_with_violations']}")
     lines.append(f"Total violations: {summary['total_violations']}")
+    lines.append(f"Total warnings: {summary['total_warnings']}")
     lines.append("")
 
     if counts:
@@ -194,11 +204,19 @@ def render_human(payload: dict[str, Any]) -> str:
             lines.append(f"  - {code}: {n}")
         lines.append("")
 
+    if warning_counts:
+        lines.append("Warning counts (advisory):")
+        for code, n in sorted(warning_counts.items(), key=lambda x: (-x[1], x[0])):
+            lines.append(f"  - {code}: {n}")
+        lines.append("")
+
     lines.append("Per-file results:")
     for item in payload["files"]:
         lines.append(f"- {item['file']} [{item['status']}]")
         for v in item["violations"]:
             lines.append(f"    * {v['code']}: {v['detail']}")
+        for w in item.get("warnings", []):
+            lines.append(f"    ! {w['code']}: {w['detail']}")
     return "\n".join(lines)
 
 
@@ -231,13 +249,15 @@ def main() -> int:
     if args.files:
         files = [Path(f).resolve() if not Path(f).is_absolute() else Path(f) for f in args.files]
     else:
-        files = tracked_plan_files(root)
+        files = discovered_plan_files(root)
 
     results = [audit_plan(path, root) for path in files]
 
     counter: Counter[str] = Counter()
+    warning_counter: Counter[str] = Counter()
     files_with_violations = 0
     total_violations = 0
+    total_warnings = 0
 
     for item in results:
         if item["violations"]:
@@ -245,14 +265,19 @@ def main() -> int:
             total_violations += len(item["violations"])
         for v in item["violations"]:
             counter[v["code"]] += 1
+        total_warnings += len(item.get("warnings", []))
+        for w in item.get("warnings", []):
+            warning_counter[w["code"]] += 1
 
     payload = {
         "summary": {
             "total_files": len(results),
             "files_with_violations": files_with_violations,
             "total_violations": total_violations,
+            "total_warnings": total_warnings,
         },
         "violation_counts": dict(counter),
+        "warning_counts": dict(warning_counter),
         "files": results,
     }
 

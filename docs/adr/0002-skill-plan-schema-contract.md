@@ -1,6 +1,6 @@
 # ADR-0002: `.skill-plan.yaml` Schema Contract
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-05-30
 - **Deciders:** Repository maintainers
 - **Related:** ADR-0001, SDLC Issue #2
@@ -26,6 +26,11 @@ Adopt a single canonical contract for `.skill-plan.yaml` with strict field rules
    - must end with `/`
    - absolute paths forbidden (no leading `/`)
    - parent traversal forbidden (no `..` segments)
+
+1a. **Experimental path convention**
+   - experimental skills should live under `skills/experimental/<skill-name>/`
+   - strict path validity still follows `skills/.../` contract
+   - non-experimental placement for experimental skills is allowed but should emit audit warning
 
 2. **Enum rule**
    - `scope ∈ {single, moderate, extended}`
@@ -116,3 +121,10 @@ Adopt a single canonical contract for `.skill-plan.yaml` with strict field rules
 - Every tracked `.skill-plan.yaml` passes strict audit gate
 - `grep` check confirms no absolute `target_path`
 - no non-enum values for constrained fields
+
+## Completion Note (2026-05-30)
+
+- ADR-0002 implementation tasks completed (Task 1-5).
+- Strict audit gate added: `scripts/audit-skill-plans.py`.
+- Migration completed: baseline violations reduced from 15 -> 0.
+- Experimental placement convention established (`skills/experimental/<skill>/`) and documented.

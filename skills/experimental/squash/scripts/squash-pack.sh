@@ -78,7 +78,7 @@ EOF
 gzip -c "$tmpfile" > "$gzfile"
 rm -f "$tmpfile"
 
-prompt="In new session run: bash skills/squash/scripts/squash-unpack.sh --file \"${gzfile}\". Then paste block between BEGIN_RESTORED_CONTEXT and END_RESTORED_CONTEXT as first message."
+prompt="In new session run: bash skills/experimental/squash/scripts/squash-unpack.sh --file \"${gzfile}\". Then paste block between BEGIN_RESTORED_CONTEXT and END_RESTORED_CONTEXT as first message."
 
 printf '{"status":"ok","payload_path":"%s","context_sha256":"%s","context_chars":%s,"new_session_prompt":%s}\n' \
   "$gzfile" "$context_sha256" "$context_chars" "$(python3 - <<'PY' "$prompt"

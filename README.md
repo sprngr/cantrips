@@ -11,6 +11,7 @@ Repository of personal agent skills, helper agents, and skill-authoring playbook
 
 - `skills/rubber-duck/`: practical rubber-duck skills (`duck-debug`, `duck-design`, `duck-teach`, `duck-triage`, `duck-review`).
 - `skills/meta-skills/`: skill-building toolkit (`skill-plan`, `skill-forge`, `skill-check`, `skill-eval`, `skill-refine`) plus docs and helper scripts.
+- `skills/experimental/`: experimental or incubating skills (`goblin-mode`, `squash`) that are not yet considered stable defaults.
 - `agents/`: routing and specialized agents (`🦆`, `skill-wizard`, `visual-reference`).
 - `archive/`: historical planning docs; useful context, not active source of truth.
 
@@ -36,6 +37,8 @@ Repository of personal agent skills, helper agents, and skill-authoring playbook
 | `skill-check` | meta-skills | `audit skill`, `skill check` | Spec and best-practice audit HTML report |
 | `skill-eval` | meta-skills | `eval skill`, `run evals` | Benchmark/eval workspace + `eval-report.html` |
 | `skill-refine` | meta-skills | `refine skill`, `/skill-refine` | `.skill-plan.patch.yaml` + `.skill-plan.patched.yaml` |
+| `goblin-mode` | experimental | `goblin mode`, `ultra terse`, `/goblin` | Ultra-terse emoji-first response mode |
+| `squash` | experimental | `pack context`, `restore context`, `squash` | Context pack/unpack workflow + restore instructions |
 
 ## Install
 
@@ -73,3 +76,4 @@ cp /path/to/cantrips/agents/*.agent.md /path/to/harness/agents/
 - Keep skills single-purpose; avoid overlapping responsibilities.
 - Keep scripts deterministic where possible; keep policy/heuristics in `SKILL.md`.
 - Treat `.skill-plan.yaml` as the canonical planning artifact for generated skills.
+- Place experimental skills under `skills/experimental/<skill>/`.

@@ -34,6 +34,52 @@ class ParseReportTests(unittest.TestCase):
         self.assertEqual(len(findings), 1)
         self.assertIn("bad 'quote' & value", findings[0]["detail"])
 
+    def test_extract_prefers_machine_report_over_other_pre_blocks(self):
+        html_text = (
+            "<html><body>"
+            "<pre>{\"noise\":true}</pre>"
+            "<details id='machine-report'><summary>x</summary><pre>{\"skill\":\"s\",\"iteration\":\"iteration-1\",\"report_date\":\"2026-05-30\",\"eval_count\":1,\"with_skill\":{\"pass_rate\":1,\"stddev\":0,\"samples\":1,\"tokens\":10,\"time\":0.1},\"without_skill\":{\"pass_rate\":0,\"stddev\":0,\"samples\":1,\"tokens\":1,\"time\":0.01}}</pre></details>"
+            "</body></html>"
+        )
+
+        data, mode = parse_report.extract_json_with_mode(html_text)
+        self.assertEqual(mode, "machine")
+        self.assertIsInstance(data, dict)
+        self.assertEqual(data.get("skill"), "s")
+
+    def test_extract_falls_back_when_machine_report_missing(self):
+        html_text = (
+            "<html><body>"
+            "<pre>not-json</pre>"
+            "<pre>{\"skill\":\"s\",\"iteration\":\"iteration-2\",\"report_date\":\"2026-05-30\",\"eval_count\":1,\"with_skill\":{\"pass_rate\":1,\"stddev\":0,\"samples\":1,\"tokens\":10,\"time\":0.1},\"without_skill\":{\"pass_rate\":0,\"stddev\":0,\"samples\":1,\"tokens\":1,\"time\":0.01}}</pre>"
+            "</body></html>"
+        )
+
+        data, mode = parse_report.extract_json_with_mode(html_text)
+        self.assertEqual(mode, "fallback")
+        self.assertIsInstance(data, dict)
+        self.assertEqual(data.get("iteration"), "iteration-2")
+
+    def test_main_outputs_extraction_mode(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            report = Path(temp_dir) / "report.html"
+            report.write_text(
+                "<html><body><pre>{\"skill\":\"s\",\"iteration\":\"iteration-3\",\"report_date\":\"2026-05-30\",\"eval_count\":1,\"with_skill\":{\"pass_rate\":1,\"stddev\":0,\"samples\":1,\"tokens\":10,\"time\":0.1},\"without_skill\":{\"pass_rate\":0,\"stddev\":0,\"samples\":1,\"tokens\":1,\"time\":0.01}}</pre></body></html>",
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                ["python3", str(MODULE_PATH), str(report)],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 0)
+            payload = json.loads(result.stdout)
+            self.assertIn("extraction_mode", payload)
+            self.assertEqual(payload["extraction_mode"], "fallback")
+
     def test_main_fails_on_invalid_utf8_input(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             report = Path(temp_dir) / "report.html"
@@ -120,6 +166,68 @@ class ParseReportTests(unittest.TestCase):
         }
 
         jsonschema.Draft7Validator(schema).validate(sample)
+
+    def test_schema_rejects_eval_iteration_integer(self):
+        try:
+            import jsonschema
+        except ImportError:
+            self.skipTest("jsonschema not installed")
+
+        schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
+        sample = {
+            "skill": "squash",
+            "iteration": 5,
+            "report_date": "2026-05-30",
+            "eval_count": 1,
+            "with_skill": {
+                "pass_rate": 1.0,
+                "stddev": 0.0,
+                "samples": 1,
+                "tokens": 100,
+                "time": 0.1,
+            },
+            "without_skill": {
+                "pass_rate": 0.0,
+                "stddev": 0.0,
+                "samples": 1,
+                "tokens": 20,
+                "time": 0.0,
+            },
+        }
+
+        with self.assertRaises(jsonschema.ValidationError):
+            jsonschema.Draft7Validator(schema).validate(sample)
+
+    def test_schema_rejects_missing_metric_keys(self):
+        try:
+            import jsonschema
+        except ImportError:
+            self.skipTest("jsonschema not installed")
+
+        schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
+        sample = {
+            "skill": "squash",
+            "iteration": "iteration-5",
+            "report_date": "2026-05-30",
+            "eval_count": 1,
+            "with_skill": {
+                "pass_rate": 1.0,
+                "stddev": 0.0,
+                "samples": 1,
+                "tokens": 100,
+                # missing required "time"
+            },
+            "without_skill": {
+                "pass_rate": 0.0,
+                "stddev": 0.0,
+                "samples": 1,
+                "tokens": 20,
+                "time": 0.0,
+            },
+        }
+
+        with self.assertRaises(jsonschema.ValidationError):
+            jsonschema.Draft7Validator(schema).validate(sample)
 
 
 if __name__ == "__main__":
