@@ -1,0 +1,97 @@
+name: skills-quality
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pyyaml
+
+      - name: Run meta-skill unit tests
+        run: |
+          python3 -m unittest discover -s "skills/meta-skills/skill-forge/scripts/tests" -p "test_*.py"
+          python3 -m unittest discover -s "skills/meta-skills/skill-check/scripts/tests" -p "test_*.py"
+          python3 -m unittest discover -s "skills/meta-skills/skill-eval/scripts/tests" -p "test_*.py"
+          python3 -m unittest discover -s "skills/meta-skills/skill-refine/scripts/tests" -p "test_*.py"
+
+      - name: Validate skill frontmatter/structure checks
+        run: |
+          python3 - <<'PY'
+          import json
+          import subprocess
+          from pathlib import Path
+
+          validator = Path("skills/meta-skills/skill-check/scripts/validate-structure.sh")
+          failures = []
+
+          for skill_md in sorted(Path("skills").rglob("SKILL.md")):
+              skill_dir = skill_md.parent
+              result = subprocess.run(
+                  ["bash", str(validator), str(skill_dir)],
+                  capture_output=True,
+                  text=True,
+                  check=False,
+              )
+              if result.returncode != 0:
+                  failures.append((str(skill_dir), f"validator exit={result.returncode}"))
+                  continue
+
+              try:
+                  checks = json.loads(result.stdout)
+              except json.JSONDecodeError:
+                  failures.append((str(skill_dir), "validator output was not valid JSON"))
+                  continue
+
+              bad = [c.get("check") for c in checks if not c.get("pass", False)]
+              if bad:
+                  failures.append((str(skill_dir), f"failed checks: {', '.join(bad)}"))
+
+          if failures:
+              print("Skill structure validation failures:")
+              for path, detail in failures:
+                  print(f"- {path}: {detail}")
+              raise SystemExit(1)
+
+          print("All skill structure checks passed.")
+          PY
+
+      - name: Run strict skill-plan audit
+        run: python3 scripts/audit-skill-plans.py --fail-on-violation
+
+      - name: Eval coverage warning (non-blocking)
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          missing = []
+          for skill_md in sorted(Path("skills").rglob("SKILL.md")):
+              skill_dir = skill_md.parent
+              evals = skill_dir / "evals" / "evals.json"
+              if not evals.exists():
+                  missing.append(str(skill_dir))
+
+          if missing:
+              print(f"::warning::Eval coverage missing for {len(missing)} skills (warn-only gate).")
+              for path in missing:
+                  print(f"::warning::{path} missing evals/evals.json")
+              print("Warn-only mode active. Promote to hard fail in future issue.")
+          else:
+              print("Eval coverage complete: all skills have evals/evals.json")
+          PY

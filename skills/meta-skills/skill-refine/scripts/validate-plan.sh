@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 # validate-plan.sh - Validate .skill-plan YAML for skill-forge import contract
 # Usage: scripts/validate-plan.sh <path-to-.skill-plan.yaml>
+#
+# Gate intent:
+# - This validator is operational/read-permissive and focused on forge import safety.
+# - It intentionally does NOT enforce ADR-0002 strict write contract details
+#   (path prefix, workflow_notes canonical type, coverage shape, etc.).
+# - For strict write-contract enforcement, use repo root script:
+#     python3 scripts/audit-skill-plans.py --fail-on-violation
 
 set -euo pipefail
 

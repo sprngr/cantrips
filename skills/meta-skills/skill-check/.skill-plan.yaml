@@ -2,8 +2,8 @@
 intent: "Audit & validate agent skills against agentskills.io spec, best-practices, and skills-ref impl"
 scope: "moderate"
 mechanism: "hybrid"
-context_assets: "checklists + templates"
-target_path: "/mnt/f/workspace/cantrips/skills/skill-check"
+context_assets: "checklists"
+target_path: "skills/meta-skills/skill-check/"
 tier: "B"
 workflow_notes: []
 turns:
@@ -18,4 +18,19 @@ turns:
   - turn: 5 (target_path)
     answer: "/mnt/f/workspace/cantrips/skills/skill-check"
 draft_changes: []
+example_placed: "references/Example.md"
+example_generated: true
 completed: true
+coverage:
+  essential_schema:
+    intent: true
+    scope: true
+    mechanism: true
+    context_assets: true
+    tier: true
+    target_path: true
+    workflow_notes: true
+    example_placed: true
+    example_generated: true
+  unanswered_branches: []
+last_backtrack_turn: null
