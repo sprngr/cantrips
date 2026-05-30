@@ -2,18 +2,9 @@ intent: "One skill packs session context into gzip temp file with handoff instru
 scope: "single"
 mechanism: "scripts"
 context_assets: "schema"
-target_path: "skills/squash/"
+target_path: "skills/experimental/squash/"
 tier: "A"
-workflow_notes:
-  - "Load assets/context-envelope.schema.json when validating envelope keys/version before unpack output is trusted."
-  - "Load references/restore-playbook.md when unpack returns status error or schema/hash checks fail."
-  - "Run deterministic checks in scripts first; only then emit restored context block."
-  - "Record provenance notes from eval iterations (e.g., baseline mismatch, assertion drift, telemetry gaps) in workflow guidance."
-  - "Prioritize discriminative eval assertions (exact_json/ordered_markers/regex_match) and prune always-pass checks each iteration."
-  - "Capture real token telemetry in timing artifacts when available; label estimates explicitly when telemetry is unavailable."
-  - "Keep generated instructions mode-neutral; avoid style-coupled phrases unless capability depends on them."
-  - "Require eval harness to record both total_tokens and token_source (telemetry or estimate) for each run."
-  - "Require each eval iteration to include at least one ambiguity/stress prompt with exact-value assertions."
+workflow_notes: []
 turns:
   - turn: 1
     question: "Pick core intent: A one skill both sides, B split skills, C restore only?"
@@ -37,16 +28,12 @@ turns:
     timestamp: "2026-05-30T00:00:05Z"
   - turn: 6
     question: "Provide target_path (workspace-relative, trailing /)."
-    answer: "skills/squash/"
+    answer: "skills/experimental/squash/"
     timestamp: "2026-05-30T00:00:06Z"
 draft_changes:
   - "Added deterministic scripts: scripts/squash-pack.sh and scripts/squash-unpack.sh for gzip/temp-file lifecycle and restore validation."
   - "Added schema asset: assets/context-envelope.schema.json for envelope contract validation."
   - "Embedded inline Tier-A example in SKILL.md with sha256 mismatch edge-case correction."
-  - "Added references/restore-playbook.md and explicit WHEN-to-load failure trigger in SKILL.md workflows."
-  - "Expanded SKILL.md workflow with schema pre-validation and provenance/eval maintenance guidance from refined plan."
-  - "Added mode-neutral instruction guardrail and telemetry-source tracking requirements in workflow_notes."
-  - "Added ambiguity/stress eval requirement with exact-value assertions in workflow_notes."
 example_placed: "inline"
 example_generated: true
 completed: true

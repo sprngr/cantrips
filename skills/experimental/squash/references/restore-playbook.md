@@ -13,7 +13,7 @@ Load this file when `squash-unpack.sh` returns `"status":"error"` or fails schem
 
 1. Delete tampered payload file.
 2. Re-run `bash scripts/squash-pack.sh --input "<context-file>"`.
-3. Re-run `bash skills/squash/scripts/squash-unpack.sh --file "<new-payload>"`.
+3. Re-run `bash skills/experimental/squash/scripts/squash-unpack.sh --file "<new-payload>"`.
 
 ## Code: `schema_missing_keys`
 

@@ -18,7 +18,7 @@ Create compact gzip context payloads and restore them safely using goblin mode.
 3. Load `assets/context-envelope.schema.json` before trusting unpacked payload content.
 4. Validate envelope keys and constants: `version=1`, `encoding=utf-8`, `algorithm=gzip`.
 5. Start new session.
-6. Run `bash skills/squash/scripts/squash-unpack.sh --file "<payload_path>"`.
+6. Run `bash skills/experimental/squash/scripts/squash-unpack.sh --file "<payload_path>"`.
 7. Verify first output JSON has `"status":"ok"` and `"sha256_valid":true`.
 8. Copy text between `BEGIN_RESTORED_CONTEXT` and `END_RESTORED_CONTEXT`.
 9. Paste copied block as first message in new session.
@@ -33,7 +33,7 @@ Use squash. Pack `/tmp/session.txt`, then tell me exactly how to restore in new 
 ### Assistant
 Run:
 ```bash
-bash skills/squash/scripts/squash-pack.sh --input "/tmp/session.txt"
+bash skills/experimental/squash/scripts/squash-pack.sh --input "/tmp/session.txt"
 ```
 
 Capture output JSON keys:
@@ -46,12 +46,12 @@ Before unpack trust, validate envelope contract using:
 
 Output example:
 ```json
-{"status":"ok","payload_path":"/tmp/squash-context-a1b2c3.json.gz","context_sha256":"6c0f...","context_chars":18472,"new_session_prompt":"In new session run: bash skills/squash/scripts/squash-unpack.sh --file \"/tmp/squash-context-a1b2c3.json.gz\". Then paste block between BEGIN_RESTORED_CONTEXT and END_RESTORED_CONTEXT as first message."}
+{"status":"ok","payload_path":"/tmp/squash-context-a1b2c3.json.gz","context_sha256":"6c0f...","context_chars":18472,"new_session_prompt":"In new session run: bash skills/experimental/squash/scripts/squash-unpack.sh --file \"/tmp/squash-context-a1b2c3.json.gz\". Then paste block between BEGIN_RESTORED_CONTEXT and END_RESTORED_CONTEXT as first message."}
 ```
 
 In new session run:
 ```bash
-bash skills/squash/scripts/squash-unpack.sh --file "/tmp/squash-context-a1b2c3.json.gz"
+bash skills/experimental/squash/scripts/squash-unpack.sh --file "/tmp/squash-context-a1b2c3.json.gz"
 ```
 
 Output starts with metadata JSON:

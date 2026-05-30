@@ -2,7 +2,7 @@ intent: "Create goblin-mode skill that minimizes token usage with ultra-simple s
 scope: "single"
 mechanism: "reasoning"
 context_assets: "none"
-target_path: "skills/goblin-mode/"
+target_path: "skills/experimental/goblin-mode/"
 tier: "A"
 workflow_notes: []
 turns:
@@ -24,7 +24,7 @@ turns:
     timestamp: "2026-05-30T00:00:00Z"
   - turn: 5
     question: "Where save plan file? target_path ending with /"
-    answer: "skills/goblin-mode/"
+    answer: "skills/experimental/goblin-mode/"
     timestamp: "2026-05-30T00:00:00Z"
   - turn: 6
     question: "Tier A default example placement inline. Keep inline or override references/Example.md?"

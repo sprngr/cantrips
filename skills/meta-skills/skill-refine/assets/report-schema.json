@@ -80,10 +80,8 @@
       "properties": {
         "skill": { "type": "string" },
         "iteration": {
-          "oneOf": [
-            { "type": "integer", "minimum": 1 },
-            { "type": "string", "pattern": "^iteration-[0-9]+$" }
-          ]
+          "type": "string",
+          "pattern": "^iteration-[0-9]+$"
         },
         "report_date": { "type": "string" },
         "eval_count": { "type": "integer", "minimum": 0 },
@@ -105,6 +103,7 @@
         },
         "with_skill": {
           "type": "object",
+          "required": ["pass_rate", "stddev", "samples", "tokens", "time"],
           "properties": {
             "pass_rate": { "type": "number" },
             "stddev": { "type": "number" },
@@ -115,6 +114,7 @@
         },
         "without_skill": {
           "type": "object",
+          "required": ["pass_rate", "stddev", "samples", "tokens", "time"],
           "properties": {
             "pass_rate": { "type": "number" },
             "stddev": { "type": "number" },

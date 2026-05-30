@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Extract JSON summary block from skill-check or skill-eval HTML reports.
 
-Reads the first <pre> tag in the report (which contains the {{JSON_SUMMARY}})
-and outputs parsed JSON to stdout. Detects report type (skill-check vs eval)
-from the JSON keys.
+Primary extraction targets machine-report block (details#machine-report > pre)
+to avoid selecting unrelated <pre> content. Includes legacy-tolerant fallback
+to first parseable <pre> JSON when machine block is missing.
 """
 
 import json
@@ -13,17 +13,49 @@ import os
 import html
 
 
-def extract_json_from_html(html_text: str) -> dict | None:
-    """Find first <pre> block and parse its JSON content."""
-    match = re.search(r"<pre[^>]*>(.*?)</pre>", html_text, re.DOTALL)
-    if not match:
-        return None
-    raw = match.group(1).strip()
-    raw = html.unescape(raw)
+def _extract_pre_blocks(html_text: str) -> list[str]:
+    return re.findall(r"<pre[^>]*>(.*?)</pre>", html_text, re.DOTALL)
+
+
+def _parse_json_block(raw_block: str) -> dict | None:
+    raw = html.unescape(raw_block.strip())
     try:
         return json.loads(raw)
     except json.JSONDecodeError:
         return None
+
+
+def extract_json_with_mode(html_text: str) -> tuple[dict | None, str]:
+    """Extract JSON summary and return extraction mode.
+
+    Modes:
+    - machine: parsed from details#machine-report pre block
+    - fallback: parsed from first parseable <pre> block
+    - none: no parseable JSON block found
+    """
+    machine_match = re.search(
+        r"<details[^>]*id=[\"']machine-report[\"'][^>]*>.*?<pre[^>]*>(.*?)</pre>.*?</details>",
+        html_text,
+        re.DOTALL,
+    )
+    if machine_match:
+        data = _parse_json_block(machine_match.group(1))
+        if data is not None:
+            return data, "machine"
+
+    # Legacy fallback: first parseable JSON <pre>
+    for block in _extract_pre_blocks(html_text):
+        data = _parse_json_block(block)
+        if data is not None:
+            return data, "fallback"
+
+    return None, "none"
+
+
+def extract_json_from_html(html_text: str) -> dict | None:
+    """Backward-compatible extractor returning only parsed JSON (if any)."""
+    data, _ = extract_json_with_mode(html_text)
+    return data
 
 
 def detect_report_type(data: dict) -> str:
@@ -111,7 +143,7 @@ def main():
     with open(report_path, "r", encoding="utf-8") as f:
         html_text = f.read()
 
-    data = extract_json_from_html(html_text)
+    data, extraction_mode = extract_json_with_mode(html_text)
     if data is None:
         print(json.dumps({"error": "No JSON summary found in <pre> block"}))
         sys.exit(1)
@@ -121,6 +153,7 @@ def main():
 
     output = {
         "report_type": report_type,
+        "extraction_mode": extraction_mode,
         "report_path": report_path,
         "raw_summary": data,
         "findings": findings,

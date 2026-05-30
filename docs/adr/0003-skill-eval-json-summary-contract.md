@@ -1,6 +1,6 @@
 # ADR-0003: `skill-eval` JSON Summary Contract
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-05-30
 - **Deciders:** Repository maintainers
 - **Related:** ADR-0001, SDLC Issues #6 and #7
@@ -58,6 +58,12 @@ Metric subobject contract (`with_skill`, `without_skill`):
 - JSON summary must be embedded in dedicated machine block near top of report template.
 - Parsing should target machine block explicitly (not positional first-`<pre>` assumption).
 
+## Contract Source of Truth
+
+- Schema: `skills/meta-skills/skill-refine/assets/report-schema.json`
+- Report template embedding `{{JSON_SUMMARY}}`: `skills/meta-skills/skill-eval/assets/eval-report-template.html`
+- Parser and contract regression tests: `skills/meta-skills/skill-refine/scripts/tests/test_parse_report.py`
+
 ## Consequences
 
 ### Positive
@@ -74,9 +80,17 @@ Metric subobject contract (`with_skill`, `without_skill`):
 2. Keep `skills/meta-skills/skill-refine/assets/report-schema.json` synchronized.
 3. Add/maintain tests for accepted payload examples.
 4. Document contract in `skill-eval/SKILL.md` references section.
+5. Follow implementation checklist in `docs/adr/0003-implementation-plan.md`.
 
 ## Verification
 
 - Sample output validates against schema.
 - `skill-refine` parser tests include multi-template payload extraction.
 - Roll-up script consumes payload without ad-hoc fallbacks.
+
+## Completion Note (2026-05-30)
+
+- Task 1 baseline completed (`reports/adr-0003-contract-baseline.md`).
+- Task 2 schema tightening completed (iteration string-only, metric keys required).
+- Task 3 parser hardening completed (machine-block first + legacy fallback with extraction mode telemetry).
+- Task 4 documentation alignment completed (contract rule noted in `skill-eval/SKILL.md`).
