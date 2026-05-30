@@ -4,6 +4,12 @@ A toolkit for the agent skills development lifecycle.
 
 Each tool has a single responsibility. `.skill-plan.yaml` is the source of truth throughout.
 
+## Agent
+
+`agents/skill-wizard.agent.md` acts as the planning agent to kick off the workflow.
+
+After planning is complete, you should run with any other agent
+
 ## Toolkit
 
 | Skill | Responsibility | Input | Output |

@@ -9,31 +9,33 @@ Repository of personal agent skills, helper agents, and skill-authoring playbook
 
 ## What lives here
 
-- `skills/rubber-duck/`: practical "rubber duck" skills (`duck-debug`, `duck-design`, `duck-teach`, `duck-triage`, `duck-review`).
+- `skills/rubber-duck/`: practical rubber-duck skills (`duck-debug`, `duck-design`, `duck-teach`, `duck-triage`, `duck-review`).
 - `skills/meta-skills/`: skill-building toolkit (`skill-plan`, `skill-forge`, `skill-check`, `skill-eval`, `skill-refine`) plus docs and helper scripts.
-- `agents/`: routing/specialized agents (`skill-wizard`, `🦆`, `visual-reference`).
+- `agents/`: routing and specialized agents (`🦆`, `skill-wizard`, `visual-reference`).
 - `archive/`: historical planning docs; useful context, not active source of truth.
+
+## Agent to skill-group map
+
+| Agent | Owns/Routs to | Skill group | Notes |
+| --- | --- | --- | --- |
+| `🦆` (`agents/rubber-duck.agent.md`) | `duck-debug`, `duck-design`, `duck-teach`, `duck-triage`, `duck-review` | `skills/rubber-duck/` | Front-door router for rubber-duck workflows; asks 1 clarifying question on unrecognized prompts. |
+| `skill-wizard` (`agents/skill-wizard.agent.md`) | `skill-plan` (active in-session), then handoff to `/skill-forge` | `skills/meta-skills/` | Planning-only agent; outputs `.skill-plan.yaml` and does not generate bundle artifacts directly. |
+| `visual-reference` (`agents/visual-reference.agent.md`) | (no local skill binding) | none | Standalone specialized agent for visual research and reference curation. |
 
 ## Skill index
 
 | Skill | Group | Trigger examples | Primary output |
-|---|---|---|---|
-| `duck-debug` | rubber-duck | "debug this", "why broken" | Root-cause trace + next checks |
-| `duck-design` | rubber-duck | "design this", "tradeoffs" | Architecture options + tradeoff framing |
-| `duck-teach` | rubber-duck | "teach me X", "how does X work" | Structured explanation (what/why/example/pitfalls) |
-| `duck-triage` | rubber-duck | "what to test", "triage this bug" | Test/priority plan + risk coverage |
-| `duck-review` | rubber-duck | "review this", "review diff" | One-line review findings + fixes |
-| `skill-plan` | meta-skills | `/skill-plan`, planning stage in `skill-wizard` | Planning rules and schema guidance for `.skill-plan.yaml` |
+| --- | --- | --- | --- |
+| `duck-debug` | rubber-duck | `debug this`, `why broken` | Root-cause trace + next checks |
+| `duck-design` | rubber-duck | `design this`, `tradeoffs` | Architecture options + tradeoff framing |
+| `duck-teach` | rubber-duck | `teach me X`, `how does X work` | Structured explanation (what/why/example/pitfalls) |
+| `duck-triage` | rubber-duck | `what to test`, `triage this bug` | Test/priority plan + risk coverage |
+| `duck-review` | rubber-duck | `review this`, `review diff` | One-line review findings + fixes |
+| `skill-plan` | meta-skills | `/skill-plan`; planning stage in `skill-wizard` | Planning rules and schema guidance for `.skill-plan.yaml` |
 | `skill-forge` | meta-skills | `/skill-forge <plan-path>` | Generated skill bundle from completed plan |
-| `skill-check` | meta-skills | "audit skill", "skill check" | Spec/best-practice audit HTML report |
-| `skill-eval` | meta-skills | "eval skill", "run evals" | Benchmark/eval workspace + `eval-report.html` |
-| `skill-refine` | meta-skills | "refine skill", "/skill-refine" | `.skill-plan.patch.yaml` + `.skill-plan.patched.yaml` |
-
-## Source of truth
-
-- Tracked source is `skills/` and `agents/`.
-- Local runtime copies under `.agents/` are ignored by git and can be regenerated.
-- `skills-lock.json` is local install metadata and is also ignored.
+| `skill-check` | meta-skills | `audit skill`, `skill check` | Spec and best-practice audit HTML report |
+| `skill-eval` | meta-skills | `eval skill`, `run evals` | Benchmark/eval workspace + `eval-report.html` |
+| `skill-refine` | meta-skills | `refine skill`, `/skill-refine` | `.skill-plan.patch.yaml` + `.skill-plan.patched.yaml` |
 
 ## Install
 

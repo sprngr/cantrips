@@ -31,7 +31,7 @@ The agent authors 3-5 test cases, scaffolds a workspace, runs with-skill and wit
 ### 2. Scaffold workspace
 
 7. Run `scripts/scaffold-workspace.sh <workspace-dir> <iteration-N> <evals-json>`. Script creates per-eval `with_skill/outputs/` and `without_skill/outputs/` directories.
-8. Copy current skill directory to `<workspace>/skill-snapshot/`. Overwrite existing snapshot.
+8. Copy current skill directory to `<workspace-dir>/skill-snapshot/`. Overwrite existing snapshot.
 
 ### 3. Execute eval runs
 
@@ -64,7 +64,7 @@ The agent authors 3-5 test cases, scaffolds a workspace, runs with-skill and wit
         fixes: [{ priority, description }]
       }
       ```
-21. Write report to `<workspace>/iteration-N/eval-report.html`.
+21. Write report to `<target-skill>/<skill-name>-iteration-N-eval-report.html`.
 
 ### 6. Analyze patterns
 
