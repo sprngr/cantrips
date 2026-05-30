@@ -1,6 +1,6 @@
 # ADR-0001: SDLC Remediation Program Plan
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-05-30
 - **Deciders:** Repository maintainers
 - **Context:** `SDLC_AUDIT_REPORT.html`, `SDLC_ACTIONABLE_ISSUES.md`
@@ -240,6 +240,12 @@ Capture contract decisions and reduce future drift.
 **Definition of Done**
 - ADR directory active with at least 3 follow-up contract ADRs
 
+**Progress Note (2026-05-30)**
+- Completed: `docs/adr/` index created
+- Completed: ADR-0002 (`.skill-plan.yaml` schema contract)
+- Completed: ADR-0003 (`skill-eval` JSON summary contract)
+- Completed: ADR-0004 (`skill-check` JSON summary contract)
+
 ---
 
 ## Delivery Strategy
@@ -252,7 +258,7 @@ Use incremental PRs, one issue per PR (except tightly coupled items):
 - PR5: #5 + #7
 - PR6: #6
 - PR7: #8
-- PR8: remaining ADRs for #9
+- PR8: optional follow-on governance refinements (if new contract ADRs emerge)
 
 ## Success Metrics
 

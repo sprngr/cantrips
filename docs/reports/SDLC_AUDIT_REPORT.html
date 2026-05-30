@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skills/Meta-Skills SDLC Audit Report</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --fg: #c9d1d9;
+      --card: #161b22;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --good: #3fb950;
+      --warn: #d29922;
+      --bad: #f85149;
+      --muted: #8b949e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 2rem;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      line-height: 1.55;
+      max-width: 1100px;
+      margin-inline: auto;
+    }
+    h1, h2, h3 { margin: 0 0 0.6rem 0; }
+    h1 { border-bottom: 2px solid var(--accent); padding-bottom: 0.6rem; }
+    h2 { color: var(--accent); margin-top: 1.8rem; }
+    p { margin: 0.4rem 0 0.8rem 0; }
+    code {
+      background: #21262d;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.1rem 0.35rem;
+    }
+    .meta {
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.8rem;
+      margin: 1rem 0 1.2rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9rem;
+    }
+    .label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .value {
+      font-size: 1.55rem;
+      font-weight: 700;
+      margin-top: 0.2rem;
+    }
+    .good { color: var(--good); }
+    .warn { color: var(--warn); }
+    .bad { color: var(--bad); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.8rem 0 1.1rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      display: block;
+    }
+    thead, tbody, tr { width: 100%; display: table; table-layout: fixed; }
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 0.6rem 0.7rem;
+      border-bottom: 1px solid var(--border);
+      word-wrap: break-word;
+    }
+    th {
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    tr:last-child td { border-bottom: 0; }
+    ul { margin-top: 0.3rem; }
+    li { margin: 0.25rem 0; }
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 0.8rem;
+    }
+    .footer { margin-top: 2rem; color: var(--muted); font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <h1>Skills/Meta-Skills SDLC Audit Report</h1>
+  <p class="meta">
+    Repository: <code>cantrips</code><br/>
+    Audit date: 2026-05-30<br/>
+    Scope: skill bundles, meta-skill code/scripts, agent routing docs, lifecycle documentation
+  </p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="label">Skills Audited</div>
+      <div class="value">12</div>
+    </div>
+    <div class="card">
+      <div class="label">Meta-skill Unit Tests</div>
+      <div class="value good">19/19 pass</div>
+    </div>
+    <div class="card">
+      <div class="label">Skills With evals/evals.json</div>
+      <div class="value warn">3 / 12</div>
+    </div>
+    <div class="card">
+      <div class="label">CI Workflows</div>
+      <div class="value bad">0</div>
+    </div>
+  </div>
+
+  <h2>Executive Summary</h2>
+  <div class="section">
+    <ul>
+      <li>Engineering quality for core meta-skill scripts is solid (tests green, deterministic helper scripts present).</li>
+      <li>SDLC control plane is incomplete: no CI pipeline, sparse evaluation coverage, and inconsistent plan contract hygiene.</li>
+      <li>Most risk is in <strong>verification and governance</strong>, not in raw implementation.</li>
+      <li>Immediate focus: enforce gates (CI + schema + baseline evals) before adding new skills.</li>
+    </ul>
+  </div>
+
+  <h2>SDLC Maturity Snapshot</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Lifecycle Stage</th>
+        <th>Score</th>
+        <th>Status</th>
+        <th>Evidence</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Plan</td>
+        <td>3 / 5</td>
+        <td class="warn">Mixed</td>
+        <td>Some `.skill-plan.yaml` files drift from canonical template and path conventions.</td>
+      </tr>
+      <tr>
+        <td>Build</td>
+        <td>4 / 5</td>
+        <td class="good">Strong</td>
+        <td>Meta-skill script suites execute cleanly; helper scripts/tests present for key bundles.</td>
+      </tr>
+      <tr>
+        <td>Verify</td>
+        <td>2 / 5</td>
+        <td class="bad">Weak</td>
+        <td>Only 3/12 skills include eval inputs; quality reports not consistently generated for all skills.</td>
+      </tr>
+      <tr>
+        <td>Release</td>
+        <td>1 / 5</td>
+        <td class="bad">Absent</td>
+        <td>No CI/CD workflow or formal release/version gate in repo.</td>
+      </tr>
+      <tr>
+        <td>Operate/Govern</td>
+        <td>1 / 5</td>
+        <td class="bad">Absent</td>
+        <td>No CONTRIBUTING/release runbook/active ADR governance structure.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Cross-Cutting Deficits</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Priority</th>
+        <th>Deficit</th>
+        <th>Impact</th>
+        <th>Recommended Remediation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="bad">P1</td>
+        <td>No CI gate</td>
+        <td>Regressions can merge undetected.</td>
+        <td>Add GitHub Actions workflow to run unit tests + structure checks + eval presence policy.</td>
+      </tr>
+      <tr>
+        <td class="bad">P1</td>
+        <td>Low eval coverage</td>
+        <td>Behavior quality unmeasured for most skills.</td>
+        <td>Create baseline evals for all missing skills; expand with scenario depth over iterations.</td>
+      </tr>
+      <tr>
+        <td class="bad">P1</td>
+        <td>Plan contract drift</td>
+        <td>Forge/refine interop risk and portability issues.</td>
+        <td>Normalize `.skill-plan.yaml` files to canonical schema + add schema validation gate.</td>
+      </tr>
+      <tr>
+        <td class="warn">P2</td>
+        <td>Governance docs missing</td>
+        <td>Contributor inconsistency and hidden tribal process.</td>
+        <td>Add <code>CONTRIBUTING.md</code>, <code>TESTING.md</code>, ADR folder, Definition-of-Done checklist.</td>
+      </tr>
+      <tr>
+        <td class="warn">P2</td>
+        <td>Dependency contract undocumented</td>
+        <td>Environment drift and onboarding friction.</td>
+        <td>Document dependencies (`python3`, `PyYAML`, `jq`, optional `jsonschema`) + bootstrap command.</td>
+      </tr>
+      <tr>
+        <td class="warn">P2</td>
+        <td>Quality artifacts uneven</td>
+        <td>No portfolio-level quality visibility.</td>
+        <td>Generate standard check/eval report set and a roll-up dashboard summary.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Per-Skill Deficit Matrix</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Skill</th>
+        <th>Priority</th>
+        <th>Primary Gaps</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>goblin-mode</td><td class="bad">P1</td><td>No eval gate; minimal supporting structure/reference assets.</td></tr>
+      <tr><td>squash</td><td class="warn">P3</td><td>Strong overall; add script unit tests and minor wording polish.</td></tr>
+      <tr><td>duck-debug</td><td class="bad">P1</td><td>No evals, plan artifact, or supporting reference/assets.</td></tr>
+      <tr><td>duck-design</td><td class="bad">P1</td><td>No evals; design decision quality unbenchmarked.</td></tr>
+      <tr><td>duck-teach</td><td class="bad">P1</td><td>No evals for depth-scaling and example quality behavior.</td></tr>
+      <tr><td>duck-triage</td><td class="bad">P1</td><td>No evals for severity classification and coverage recommendations.</td></tr>
+      <tr><td>duck-review</td><td class="warn">P2</td><td>Has plan+evals; lacks full artifact parity and fresh quality report cycle.</td></tr>
+      <tr><td>skill-plan</td><td class="warn">P2</td><td>No evals; no script-backed validation checks for interview output quality.</td></tr>
+      <tr><td>skill-forge</td><td class="warn">P2</td><td>Strongest bundle; tighten import contract checks to prevent schema drift.</td></tr>
+      <tr><td>skill-check</td><td class="bad">P1</td><td>No self-evals; own plan artifact formatting drift.</td></tr>
+      <tr><td>skill-eval</td><td class="bad">P1</td><td>No self-evals; contract/schema consistency improvements needed.</td></tr>
+      <tr><td>skill-refine</td><td class="bad">P1</td><td>No evals; report parser brittle to template variation.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Roadmap</h2>
+  <div class="section">
+    <h3>0–7 Days (Quick Wins)</h3>
+    <ul>
+      <li>Add CI workflow (unit tests + structure checks + eval presence policy).</li>
+      <li>Normalize existing `.skill-plan.yaml` files to canonical schema.</li>
+      <li>Create baseline eval stubs for all skills currently missing evals.</li>
+      <li>Add contributor/testing docs with required dependency matrix.</li>
+    </ul>
+
+    <h3>1–3 Weeks</h3>
+    <ul>
+      <li>Build robust eval suites for duck-debug/design/teach/triage.</li>
+      <li>Add self-evals for skill-check, skill-eval, and skill-refine.</li>
+      <li>Harden contracts: shared schema validation for plans and report JSON.</li>
+      <li>Add a quality dashboard artifact summarizing check/eval status by skill.</li>
+    </ul>
+
+    <h3>1–2 Months</h3>
+    <ul>
+      <li>Introduce release governance (versioning, changelog policy, quality gate).</li>
+      <li>Add ADRs for plan schema, eval scoring, and report JSON contracts.</li>
+      <li>Track KPIs: 100% eval coverage, 100% CI gate pass, 0 absolute target paths.</li>
+    </ul>
+  </div>
+
+  <h2>Companion Artifact</h2>
+  <p>
+    Actionable issue list created in:<br/>
+    <code>SDLC_ACTIONABLE_ISSUES.md</code>
+  </p>
+
+  <p class="footer">
+    Generated from repository inspection and script/test execution on 2026-05-30.
+  </p>
+</body>
+</html>

@@ -17,3 +17,6 @@ This directory tracks durable decisions for skills/meta-skills SDLC, quality gat
 ## Current ADRs
 
 - [ADR-0001: SDLC Remediation Program Plan](./0001-sdlc-remediation-program-plan.md)
+- [ADR-0002: `.skill-plan.yaml` Schema Contract](./0002-skill-plan-schema-contract.md)
+- [ADR-0003: `skill-eval` JSON Summary Contract](./0003-skill-eval-json-summary-contract.md)
+- [ADR-0004: `skill-check` JSON Summary Contract](./0004-skill-check-json-summary-contract.md)
