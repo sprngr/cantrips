@@ -2,8 +2,8 @@
 intent: "Create & run skill evaluations per agentskills.io eval spec. Full lifecycle: test case authoring, dual-run execution, assertion grading, benchmark aggregation, pattern analysis, improvement handoff to skill-forge."
 scope: "extended"
 mechanism: "hybrid"
-context_assets: "schemas-in-assets, prompt-templates, checklist, workspace-layout, html-report-template"
-target_path: "/mnt/f/workspace/skills/skill-eval/"
+context_assets: "templates"
+target_path: "skills/meta-skills/skill-eval/"
 tier: "C"
 workflow_notes:
   - "references/ is flat, all templates/schemas in assets/"
@@ -33,4 +33,19 @@ draft_changes:
   - "Added grade_assertions.py helper for deterministic assertion checks"
   - "Added aggregate_benchmark.py helper for stat computation"
   - "Added spawn_runs.py helper for subagent dispatch generation"
+example_placed: "references/Example.md"
+example_generated: true
 completed: true
+coverage:
+  essential_schema:
+    intent: true
+    scope: true
+    mechanism: true
+    context_assets: true
+    tier: true
+    target_path: true
+    workflow_notes: true
+    example_placed: true
+    example_generated: true
+  unanswered_branches: []
+last_backtrack_turn: null

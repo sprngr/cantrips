@@ -11,12 +11,9 @@ scope: extended
 tier: C
 mechanism: hybrid
 
-context_assets:
-  - schema      # JSON schema for skill-eval and skill-check report formats
-  - checklists  # Priority ranking rules (spec violations > failing evals > style nits)
-  - templates   # Patch proposal format, patch artifact template, changelog format
+context_assets: schema
 
-target_path: /mnt/f/workspace/cantrips/skills/meta-skills/skill-refine/
+target_path: skills/meta-skills/skill-refine/
 
 triggers:
   - "refine skill"
@@ -26,30 +23,26 @@ triggers:
   - "/skill-refine"
 
 workflow_notes:
-  pipeline:
-    - step: Read
-      output: parsed findings list
-      detail: Scripts parse JSON summaries from skill-eval/skill-check reports
-    - step: Rank
-      output: prioritized patch queue
-      detail: AI ranks by severity (spec violations > failing evals > style nits)
-    - step: Patch
-      output: .skill-plan.patch.yaml + .skill-plan.patched.yaml
-      detail: Propose plan-only operations with user approval gates
-    - step: Validate
-      output: forge-compatible patched plan
-      detail: Validate required fields/enums/completed=true before handoff
-  gates:
-    - between: Rank → Patch
-      type: user-approval
-    - between: Patch → Validate
-      type: user-approval
-  roles:
-    - user (approver, trigger controller)
-  editing_scope: .skill-plan.yaml only
-  outputs:
-    - .skill-plan.patch.yaml
-    - .skill-plan.patched.yaml
+  - "pipeline[0].step: Read"
+  - "pipeline[0].output: parsed findings list"
+  - "pipeline[0].detail: Scripts parse JSON summaries from skill-eval/skill-check reports"
+  - "pipeline[1].step: Rank"
+  - "pipeline[1].output: prioritized patch queue"
+  - "pipeline[1].detail: AI ranks by severity (spec violations > failing evals > style nits)"
+  - "pipeline[2].step: Patch"
+  - "pipeline[2].output: .skill-plan.patch.yaml + .skill-plan.patched.yaml"
+  - "pipeline[2].detail: Propose plan-only operations with user approval gates"
+  - "pipeline[3].step: Validate"
+  - "pipeline[3].output: forge-compatible patched plan"
+  - "pipeline[3].detail: Validate required fields/enums/completed=true before handoff"
+  - "gates[0].between: Rank → Patch"
+  - "gates[0].type: user-approval"
+  - "gates[1].between: Patch → Validate"
+  - "gates[1].type: user-approval"
+  - "roles[0]: user (approver, trigger controller)"
+  - "editing_scope: .skill-plan.yaml only"
+  - "outputs[0]: .skill-plan.patch.yaml"
+  - "outputs[1]: .skill-plan.patched.yaml"
 
 example_placed: references/Example.md
 example_generated: true
