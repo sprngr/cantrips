@@ -23,7 +23,7 @@ Agent: "refine plan skills/my-skill/.skill-plan.yaml"
 
 1. Require existing `.skill-plan.yaml` path. If missing, stop and ask user for path.
 2. Read base plan YAML. Confirm it is parseable and has required planning fields.
-3. Locate `*-skill-check-report.html` and/or `eval-report.html` provided by user.
+3. Locate `*-skill-check-report.html` and/or `*-eval-report.html` provided by user.
 4. Run `Bash scripts/parse-report.sh <report-path>` for each report.
 5. Validate parsed JSON against `assets/report-schema.json`. Show parse errors if malformed.
 6. Present feedback summary: total findings, top failures, affected plan areas.

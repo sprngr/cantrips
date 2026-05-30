@@ -1,0 +1,6 @@
+Session summary:
+- Ticket: CTX-1042
+- User requested handoff with compact payload.
+- Action: preserve command snippets and error strings.
+
+Required reminder: keep BEGIN_RESTORED_CONTEXT / END_RESTORED_CONTEXT markers exact.

@@ -1,0 +1,6 @@
+Edge payload notes:
+1) This fixture is used for tamper-detection.
+2) Unpack must fail after payload byte mutation.
+3) Expected code: sha256_mismatch.
+
+Integrity token: EDGE-CHECK-77

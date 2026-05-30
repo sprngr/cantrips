@@ -1,0 +1,89 @@
+{
+  "skill_name": "squash",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Use squash to pack skills/squash/evals/fixtures/session-normal.txt, then unpack payload and return metadata plus restored context markers and bootstrap instruction text.",
+      "expected_output": "Produce metadata JSON with payload_path, status ok, and new_session_prompt that tells user to paste restored block as first message; include BEGIN_RESTORED_CONTEXT and END_RESTORED_CONTEXT markers in restore output.",
+      "files": [
+        "skills/squash/evals/fixtures/session-normal.txt"
+      ],
+      "assertions": [
+        "file_exists(\"pack.json\")",
+        "valid_json(\"pack.json\")",
+        "exact_json(\"pack.json\", \"status\", \"ok\")",
+        "contains(\"pack.json\", \"new_session_prompt\")",
+        "contains(\"pack.json\", \"first message\")",
+        "file_exists(\"unpack.txt\")",
+        "ordered_markers(\"unpack.txt\", \"BEGIN_RESTORED_CONTEXT\", \"END_RESTORED_CONTEXT\")",
+        "contains(\"unpack.txt\", \"CTX-1042\")",
+        "exact_json(\"unpack-meta.json\", \"sha256_valid\", true)"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Use squash to pack skills/squash/evals/fixtures/session-edge.txt, tamper payload, run unpack, and capture integrity error with canonical code.",
+      "expected_output": "Produce error JSON with status error and code sha256_mismatch.",
+      "files": [
+        "skills/squash/evals/fixtures/session-edge.txt"
+      ],
+      "assertions": [
+        "file_exists(\"unpack-error.json\")",
+        "valid_json(\"unpack-error.json\")",
+        "exact_json(\"unpack-error.json\", \"status\", \"error\")",
+        "exact_json(\"unpack-error.json\", \"code\", \"sha256_mismatch\")",
+        "contains(\"unpack-error.json\", \"expected\")",
+        "contains(\"unpack-error.json\", \"actual\")"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Run squash-pack.sh with malformed input (missing --input argument) and return structured error output.",
+      "expected_output": "Produce error JSON that includes code missing_input.",
+      "assertions": [
+        "file_exists(\"error.json\")",
+        "valid_json(\"error.json\")",
+        "exact_json(\"error.json\", \"status\", \"error\")",
+        "exact_json(\"error.json\", \"code\", \"missing_input\")",
+        "contains(\"error.json\", \"detail\")"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Use squash to pack and unpack a larger unicode fixture and verify instruction fidelity for restore command text.",
+      "expected_output": "Produce metadata JSON that includes exact unpack command path fragment and guidance to paste restored block as first message; restore output includes Ωmega and sha256_valid true.",
+      "files": [
+        "skills/squash/evals/fixtures/session-large-unicode.txt"
+      ],
+      "assertions": [
+        "file_exists(\"pack.json\")",
+        "valid_json(\"pack.json\")",
+        "exact_json(\"pack.json\", \"status\", \"ok\")",
+        "contains(\"pack.json\", \"bash skills/squash/scripts/squash-unpack.sh --file\")",
+        "contains(\"pack.json\", \"BEGIN_RESTORED_CONTEXT and END_RESTORED_CONTEXT as first message\")",
+        "file_exists(\"unpack-meta.json\")",
+        "exact_json(\"unpack-meta.json\", \"sha256_valid\", true)",
+        "contains(\"unpack.txt\", \"Ωmega\")",
+        "regex_match(\"unpack.txt\", \"context_chars\")"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Need this moved to new chat with minimal fuss. Use squash flow and return exact first-message bootstrap instruction plus restored block markers.",
+      "expected_output": "Produce metadata JSON with new_session_prompt containing exact first-message wording and unpack command path; produce restore output with ordered BEGIN/END markers.",
+      "files": [
+        "skills/squash/evals/fixtures/session-normal.txt"
+      ],
+      "assertions": [
+        "file_exists(\"pack.json\")",
+        "valid_json(\"pack.json\")",
+        "exact_json(\"pack.json\", \"status\", \"ok\")",
+        "contains(\"pack.json\", \"bash skills/squash/scripts/squash-unpack.sh --file\")",
+        "contains(\"pack.json\", \"BEGIN_RESTORED_CONTEXT and END_RESTORED_CONTEXT as first message\")",
+        "contains(\"pack.json\", \"first message\")",
+        "file_exists(\"unpack.txt\")",
+        "ordered_markers(\"unpack.txt\", \"BEGIN_RESTORED_CONTEXT\", \"END_RESTORED_CONTEXT\")"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+intent: "One skill packs session context into gzip temp file with handoff instructions, and unpacks/loads same payload in new session."
+scope: "single"
+mechanism: "scripts"
+context_assets: "schema"
+target_path: "skills/squash/"
+tier: "A"
+workflow_notes: []
+turns:
+  - turn: 1
+    question: "Pick core intent: A one skill both sides, B split skills, C restore only?"
+    answer: "A"
+    timestamp: "2026-05-30T00:00:01Z"
+  - turn: 2
+    question: "Choose scope: single, moderate, extended?"
+    answer: "single"
+    timestamp: "2026-05-30T00:00:02Z"
+  - turn: 3
+    question: "Choose mechanism: reasoning, scripts, hybrid?"
+    answer: "scripts"
+    timestamp: "2026-05-30T00:00:03Z"
+  - turn: 4
+    question: "Choose context_assets: none, schema, templates, checklists, manuals?"
+    answer: "schema, manuals"
+    timestamp: "2026-05-30T00:00:04Z"
+  - turn: 5
+    question: "context_assets allows one value. Pick primary: schema or manuals?"
+    answer: "schema"
+    timestamp: "2026-05-30T00:00:05Z"
+  - turn: 6
+    question: "Provide target_path (workspace-relative, trailing /)."
+    answer: "skills/squash/"
+    timestamp: "2026-05-30T00:00:06Z"
+draft_changes:
+  - "Added deterministic scripts: scripts/squash-pack.sh and scripts/squash-unpack.sh for gzip/temp-file lifecycle and restore validation."
+  - "Added schema asset: assets/context-envelope.schema.json for envelope contract validation."
+  - "Embedded inline Tier-A example in SKILL.md with sha256 mismatch edge-case correction."
+example_placed: "inline"
+example_generated: true
+completed: true
+coverage:
+  essential_schema:
+    intent: true
+    scope: true
+    mechanism: true
+    context_assets: true
+    tier: true
+    target_path: true
+    workflow_notes: true
+    example_placed: true
+    example_generated: true
+  unanswered_branches: []
+last_backtrack_turn: null

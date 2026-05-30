@@ -1,0 +1,51 @@
+intent: "Create goblin-mode skill that minimizes token usage with ultra-simple sentence structures and emoji, using full text only when necessary (code or warnings)."
+scope: "single"
+mechanism: "reasoning"
+context_assets: "none"
+target_path: "skills/goblin-mode/"
+tier: "A"
+workflow_notes: []
+turns:
+  - turn: 1
+    question: "Pick planning mode: quick (3-4 turns) or deep (dynamic)?"
+    answer: "dynamic"
+    timestamp: "2026-05-30T00:00:00Z"
+  - turn: 2
+    question: "Choose scope: single, moderate, or extended."
+    answer: "single"
+    timestamp: "2026-05-30T00:00:00Z"
+  - turn: 3
+    question: "Choose mechanism: reasoning, scripts, or hybrid?"
+    answer: "reasoning"
+    timestamp: "2026-05-30T00:00:00Z"
+  - turn: 4
+    question: "Context assets need? none, schema, templates, checklists, manuals."
+    answer: "none"
+    timestamp: "2026-05-30T00:00:00Z"
+  - turn: 5
+    question: "Where save plan file? target_path ending with /"
+    answer: "skills/goblin-mode/"
+    timestamp: "2026-05-30T00:00:00Z"
+  - turn: 6
+    question: "Tier A default example placement inline. Keep inline or override references/Example.md?"
+    answer: "A"
+    timestamp: "2026-05-30T00:00:00Z"
+draft_changes:
+  - "Generated Tier A SKILL.md only; no scripts/references/assets needed for single+reasoning scope."
+  - "Embedded end-to-end example inline under SKILL.md ## Example per Tier A placement rule."
+example_placed: "inline"
+example_generated: true
+completed: true
+coverage:
+  essential_schema:
+    intent: true
+    scope: true
+    mechanism: true
+    context_assets: true
+    tier: true
+    target_path: true
+    workflow_notes: true
+    example_placed: true
+    example_generated: true
+  unanswered_branches: []
+last_backtrack_turn: null

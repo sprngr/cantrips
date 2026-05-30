@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/squash/context-envelope.schema.json",
+  "title": "Squash Context Envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "encoding",
+    "algorithm",
+    "context_sha256",
+    "context_chars",
+    "context"
+  ],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "const": 1
+    },
+    "encoding": {
+      "type": "string",
+      "const": "utf-8"
+    },
+    "algorithm": {
+      "type": "string",
+      "const": "gzip"
+    },
+    "context_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "context_chars": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "context": {
+      "type": "string"
+    }
+  }
+}

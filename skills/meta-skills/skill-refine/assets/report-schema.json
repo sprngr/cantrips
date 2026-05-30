@@ -14,7 +14,10 @@
         "skill": { "type": "string" },
         "target_path": { "type": "string" },
         "audit_date": { "type": "string" },
-        "grade": { "type": "string", "enum": ["A", "B", "C", "D", "F"] },
+        "grade": {
+          "type": "string",
+          "pattern": "^[ABCDF][+-]?$"
+        },
         "spec": {
           "type": "object",
           "required": ["score", "total", "checks"],
@@ -49,7 +52,12 @@
           "type": "object",
           "required": ["score"],
           "properties": {
-            "score": { "type": "string" },
+            "score": {
+              "oneOf": [
+                { "type": "integer" },
+                { "type": "string" }
+              ]
+            },
             "found": { "type": "array", "items": { "type": "string" } },
             "warnings": { "type": "array", "items": { "type": "string" } }
           }
@@ -71,7 +79,12 @@
       "required": ["skill", "iteration", "report_date", "eval_count", "with_skill", "without_skill"],
       "properties": {
         "skill": { "type": "string" },
-        "iteration": { "type": "integer", "minimum": 1 },
+        "iteration": {
+          "oneOf": [
+            { "type": "integer", "minimum": 1 },
+            { "type": "string", "pattern": "^iteration-[0-9]+$" }
+          ]
+        },
         "report_date": { "type": "string" },
         "eval_count": { "type": "integer", "minimum": 0 },
         "readiness": {
@@ -115,7 +128,12 @@
           "items": {
             "type": "object",
             "properties": {
-              "id": { "type": "string" },
+                "id": {
+                  "oneOf": [
+                    { "type": "string" },
+                    { "type": "integer" }
+                  ]
+                },
               "pass_rate": { "type": "number" },
               "assertions": {
                 "type": "array",

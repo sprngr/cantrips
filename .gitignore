@@ -2,7 +2,7 @@
 skills-lock.json
 
 # Ignore test output
-*-eval-workspace/
+*-iteration-*-eval-report.html
 *-skill-check-report.html
 
 # Python
