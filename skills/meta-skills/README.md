@@ -1,85 +1,98 @@
 # Meta-Skills
 
-A toolkit for the agent skills development lifecycle.
+Toolkit for agent-skill development lifecycle.
 
-Each tool has a single responsibility. `.skill-plan.yaml` is the source of truth throughout.
+Each component has a single responsibility.
+`.skill-plan.yaml` is the canonical artifact across the whole loop.
 
-## Agent
+## Planning agent
 
-`agents/skill-wizard.agent.md` acts as the planning agent to kick off the workflow.
-
-After planning is complete, you should run with any other agent
+- `agents/skill-wizard.agent.md` starts the workflow and runs the planning interview.
+- Planning phase ends when an approved `.skill-plan.yaml` is written.
+- After planning, run forge/check/eval/refine from your normal agent workflow.
 
 ## Toolkit
 
-| Skill | Responsibility | Input | Output |
-|---|---|---|---|
-| **skill-wizard** (agent) | Interrogation engine (tiered by complexity) | User intent | Triggers skill-plan |
-| **skill-plan** | Decision capture | Interview answers | `.skill-plan.yaml` |
-| **skill-forge** | Generate + validate from plan | `.skill-plan.yaml` | Skill bundle |
-| **skill-check** | Audit against spec | Skill bundle | check-report |
-| **skill-eval** | Test & benchmark | Skill bundle | eval-logs |
-| **skill-refine** | Patch plan from feedback | Reports / user input | Patched `.skill-plan.yaml` |
+| Component | Responsibility | Input | Output |
+| --- | --- | --- | --- |
+| `skill-wizard` (agent) | Tiered interview orchestrator for planning stage | User intent | Approved plan workflow |
+| `skill-plan` | Decision capture and schema-complete plan authoring | Interview answers | `.skill-plan.yaml` |
+| `skill-forge` | Generate and validate bundle from plan | `.skill-plan.yaml` | Skill bundle (`SKILL.md`, `scripts/`, `references/`) |
+| `skill-check` | Spec and best-practice audit | Skill bundle | `*-skill-check-report.html` |
+| `skill-eval` | Test and benchmark behavior | Skill bundle | Eval workspace + `eval-report.html` |
+| `skill-refine` | Patch plan from audit/eval feedback | Reports + user guidance | `.skill-plan.patch.yaml`, `.skill-plan.patched.yaml` |
 
-## Flow
+## Workflow
 
-Human-in-the-loop at every stage. No automated orchestration.
+Human in loop at every stage. No automatic orchestration.
 
-```
+```text
        [ User Intent ]
-              │
-              ▼
-      [ skill-wizard ] ──────(Tiered Interrogation)
-              │
-              ▼
-      [  skill-plan  ] ──────(Decision Capture)
-              │
-              ▼
-      ┌──────────────────┐
-      │ .skill-plan.yaml │◄────────────────────────────────┐
-      └────────┬─────────┘                                 │
-               │                                           │ (Patches yaml)
-               ▼                                           │
-      [  skill-forge  ] ──────(Generate + Validate)        │
-               │                                           │
-               ▼                                           │
-      ┌───────────────┐                                    │
-      │  Skill Bundle │                                    │
-      └───────┬───────┘                                    │
-              │                                            │
-              ├────────────────────┐                       │
-              ▼                    ▼                       │
-      [ skill-check ]      [  skill-eval  ]                │
-              │                    │                       │
-              ▼                    ▼                       │
-      ┌──────────────┐     ┌──────────────┐                │
-      │ check-report │     │  eval-logs   │                │
-      └──────┬───────┘     └──────┬───────┘                │
-             │                    │                        │
-             └────────┬───────────┘                        │
-                      ▼                                    │
-              [ skill-refine ] ────────────────────────────┘
+              |
+              v
+   [ skill-wizard + skill-plan ] -- (tiered planning)
+              |
+              v
+      +------------------+
+      | .skill-plan.yaml |
+      +---------+--------+
+                |
+                v
+        [   skill-forge   ] -- (generate + validate)
+                |
+                v
+         +--------------+
+         | Skill Bundle |
+         +------+-------+
+                |
+        +-------+-------+
+        |               |
+        v               v
+ [  skill-check ]   [  skill-eval  ]
+        |               |
+        v               v
+ +-------------+   +-------------+
+ | check-report|   |  eval-logs  |
+ +------+------+   +------+------+
+        |               |
+        +-------+-------+
+                |
+                v
+        [  skill-refine  ] -- (patch plan)
+                |
+                +------------------------------+
+                                               |
+                                               v
+                                  +---------------------------+
+                                  | .skill-plan.patched.yaml |
+                                  +-------------+-------------+
+                                                |
+                                                v
+                                         [ skill-forge ]
+                                                |
+                                                v
+                               repeat check/eval/refine loop
 ```
 
-## Example working flow (tracer bullet)
+## Example tracer-bullet flow
 
 Scenario: build `pr-risk-triage` skill.
 
-### 1) Plan the skill
+### 1) Plan
 
-User prompt to skill-wizard:
+Prompt to `skill-wizard`:
 
 ```text
 Build a PR risk triage skill. Use scripts for deterministic scoring and AI for rationale.
 ```
 
-Expected output artifact:
+Expected artifact:
 
 ```text
 skills/pr-risk-triage/.skill-plan.yaml
 ```
 
-### 2) Generate bundle from plan
+### 2) Forge from plan
 
 ```text
 /skill-forge skills/pr-risk-triage/.skill-plan.yaml
@@ -94,7 +107,7 @@ skills/pr-risk-triage/
   references/
 ```
 
-### 3) Run audits and evals
+### 3) Run audit and eval
 
 ```text
 /skill-check skills/pr-risk-triage
@@ -127,15 +140,15 @@ skills/pr-risk-triage/.skill-plan.patched.yaml
 /skill-forge skills/pr-risk-triage/.skill-plan.patched.yaml
 ```
 
-Repeat check/eval/refine loop until quality target is met.
+Repeat forge/check/eval/refine loop until quality target is met.
 
 ## Pass criteria checklist
 
-- [ ] `skill-wizard` writes a valid `.skill-plan.yaml` with `completed: true` on approve
-- [ ] `skill-forge` imports the plan without schema/enum errors
-- [ ] Generated bundle includes expected tier artifacts (`SKILL.md`, `scripts/`, `references/`)
-- [ ] `skill-check` produces report with no blocking spec violations (or fewer than previous round)
-- [ ] `skill-eval` shows measurable improvement vs baseline (pass rate/readiness)
-- [ ] `skill-refine` outputs both `.skill-plan.patch.yaml` and `.skill-plan.patched.yaml`
-- [ ] Re-forge from patched plan succeeds without manual interview fallback
-- [ ] Second check/eval round improves or confirms target quality
+- [ ] `skill-wizard` writes valid `.skill-plan.yaml` with `completed: true` after approval.
+- [ ] `skill-forge` imports plan without schema or enum errors.
+- [ ] Generated bundle contains expected tier artifacts (`SKILL.md`, `scripts/`, `references/`).
+- [ ] `skill-check` report has no blocking spec violations (or fewer than previous round).
+- [ ] `skill-eval` shows measurable improvement vs baseline (pass rate/readiness).
+- [ ] `skill-refine` writes both `.skill-plan.patch.yaml` and `.skill-plan.patched.yaml`.
+- [ ] Re-forge from patched plan succeeds without manual interview fallback.
+- [ ] Second check/eval round improves or confirms target quality.
