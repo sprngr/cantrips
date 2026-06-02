@@ -3,7 +3,7 @@
 🔮 Because I'm still not convinced this isn't magic.
 
 > [!NOTE]
-> My preferred harness is [OpenCode](https://opencode.ai/) so you may need to make some tweaks to agents or skill permissions to fit your too.
+> My preferred harness is [OpenCode](https://opencode.ai/) so you may need to make some tweaks to agents or skill permissions to fit your tooling.
 
 Repository of personal agent skills, helper agents, and skill-authoring playbooks. YMMV. GLHF.
 
