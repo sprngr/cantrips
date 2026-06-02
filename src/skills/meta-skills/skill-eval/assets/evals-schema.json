@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Evals Config",
+  "description": "agentskills.io eval test suite definition. Stored at <skill>/evals/evals.json",
+  "type": "object",
+  "required": ["skill_name", "evals"],
+  "properties": {
+    "skill_name": {
+      "type": "string",
+      "description": "Name of the skill being evaluated"
+    },
+    "evals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "prompt", "expected_output"],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique numeric identifier for this test case"
+          },
+          "prompt": {
+            "type": "string",
+            "description": "Realistic user prompt to test"
+          },
+          "expected_output": {
+            "type": "string",
+            "description": "Human-readable description of what success looks like"
+          },
+          "files": {
+            "type": "array",
+            "description": "Relative paths to input fixture files",
+            "items": {
+              "type": "string"
+            }
+          },
+          "assertions": {
+            "type": "array",
+            "description": "Verifiable pass/fail statements about the output",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

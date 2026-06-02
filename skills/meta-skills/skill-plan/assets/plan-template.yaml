@@ -1,0 +1,32 @@
+# .skill-plan.yaml - Planning state artifact produced by skill-wizard
+intent: "[core capability statement]"
+scope: "[single | moderate | extended]"
+mechanism: "[reasoning | scripts | hybrid]"
+context_assets: "[none | schema | templates | checklists | manuals]"
+target_path: "[workspace-relative path ending with /]"
+tier: "[A | B | C]"
+workflow_notes:
+  - "[step -> script|AI -> output or planning constraint]"
+turns:
+  - turn: 1
+    question: "[what was asked]"
+    answer: "[user answer]"
+    timestamp: "ISO-8601"
+draft_changes:
+  - "[forge-added draft note, optional]"
+example_placed: "[inline | references/Example.md]"
+example_generated: false
+completed: false
+coverage:
+  essential_schema:
+    intent: false
+    scope: false
+    mechanism: false
+    context_assets: false
+    tier: false
+    target_path: false
+    workflow_notes: false
+    example_placed: false
+    example_generated: false
+  unanswered_branches: []
+last_backtrack_turn: null

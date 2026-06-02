@@ -1,0 +1,63 @@
+# .skill-plan.yaml - Planning state artifact produced by skill-wizard
+intent: "Ultra compact session context for AI handoff without meaning loss"
+scope: "single"
+mechanism: "hybrid"
+context_assets: "none"
+target_path: "skills/experimental/squash/"
+tier: "B"
+workflow_notes:
+  - "compact session context -> AI -> compressed handoff text"
+  - "apply caveman terse simplification -> AI -> terse handoff text"
+  - "remove filler words deterministically -> script -> token-minimized text"
+  - "write output to disk -> script -> saved handoff artifact"
+turns:
+  - turn: 1
+    question: "Pick planning mode: quick (3-4 turns) or deep (dynamic)?"
+    answer: "deep"
+    timestamp: "2026-05-30T00:00:00Z"
+  - turn: 2
+    question: "Scope pick: single, moderate, or extended?"
+    answer: "single"
+    timestamp: "2026-05-30T00:00:00Z"
+  - turn: 3
+    question: "Mechanism choose: reasoning, scripts, or hybrid?"
+    answer: "hybrid"
+    timestamp: "2026-05-30T00:00:00Z"
+  - turn: 4
+    question: "Which steps deterministic script vs AI judgment?"
+    answer: |
+      compact -> AI
+      caveman -> AI
+      remove filler words -> script
+      write to disk -> script
+    timestamp: "2026-05-30T00:00:00Z"
+  - turn: 5
+    question: "Confirm intent in one sentence."
+    answer: "ultra compact session context to handoff to an AI agent"
+    timestamp: "2026-05-30T00:00:00Z"
+  - turn: 6
+    question: "Context assets choose one: none, schema, templates, checklists, manuals?"
+    answer: "none"
+    timestamp: "2026-05-30T00:00:00Z"
+  - turn: 7
+    question: "Target path where save plan/artifacts?"
+    answer: "skills/experimental/squash/"
+    timestamp: "2026-05-30T00:00:00Z"
+draft_changes:
+  - "Moved input-source conditional handling to scripts/squash-session.sh (conditional push rule)."
+example_placed: "references/Example.md"
+example_generated: true
+completed: true
+coverage:
+  essential_schema:
+    intent: true
+    scope: true
+    mechanism: true
+    context_assets: true
+    tier: true
+    target_path: true
+    workflow_notes: true
+    example_placed: true
+    example_generated: true
+  unanswered_branches: []
+last_backtrack_turn: null

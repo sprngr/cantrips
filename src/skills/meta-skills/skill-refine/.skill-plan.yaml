@@ -1,0 +1,64 @@
+# .skill-plan.yaml — skill-refine
+version: 1
+completed: true
+
+intent: >
+  Iteratively improve existing agent skills by consuming structured feedback
+  (skill-eval reports, skill-check reports, user guidance) and producing
+  ranked plan patches with human-in-the-loop approval per round.
+
+scope: extended
+tier: C
+mechanism: hybrid
+
+context_assets: schema
+
+target_path: skills/meta-skills/skill-refine/
+
+triggers:
+  - "refine skill"
+  - "improve plan"
+  - "patch plan"
+  - "apply eval feedback"
+  - "/skill-refine"
+
+workflow_notes:
+  - "pipeline[0].step: Read"
+  - "pipeline[0].output: parsed findings list"
+  - "pipeline[0].detail: Scripts parse JSON summaries from skill-eval/skill-check reports"
+  - "pipeline[1].step: Rank"
+  - "pipeline[1].output: prioritized patch queue"
+  - "pipeline[1].detail: AI ranks by severity (spec violations > failing evals > style nits)"
+  - "pipeline[2].step: Patch"
+  - "pipeline[2].output: .skill-plan.patch.yaml + .skill-plan.patched.yaml"
+  - "pipeline[2].detail: Propose plan-only operations with user approval gates"
+  - "pipeline[3].step: Validate"
+  - "pipeline[3].output: forge-compatible patched plan"
+  - "pipeline[3].detail: Validate required fields/enums/completed=true before handoff"
+  - "gates[0].between: Rank → Patch"
+  - "gates[0].type: user-approval"
+  - "gates[1].between: Patch → Validate"
+  - "gates[1].type: user-approval"
+  - "roles[0]: user (approver, trigger controller)"
+  - "editing_scope: .skill-plan.yaml only"
+  - "outputs[0]: .skill-plan.patch.yaml"
+  - "outputs[1]: .skill-plan.patched.yaml"
+
+example_placed: references/Example.md
+example_generated: true
+
+coverage:
+  essential_schema:
+    intent: true
+    scope: true
+    mechanism: true
+    context_assets: true
+    tier: true
+    target_path: true
+    workflow_notes: true
+    example_placed: true
+    example_generated: true
+  unanswered_branches: []
+
+turns: 8
+last_backtrack_turn: null

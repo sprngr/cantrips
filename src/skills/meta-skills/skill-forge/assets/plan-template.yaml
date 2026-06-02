@@ -1,0 +1,32 @@
+# .skill-plan.yaml - Completed planning artifact consumed by skill-forge
+intent: "[core capability statement]"
+scope: "[single | moderate | extended]"
+mechanism: "[reasoning | scripts | hybrid]"
+context_assets: "[none | schema | templates | checklists | manuals]"
+target_path: "[workspace-relative path ending with /]"
+tier: "[A | B | C]"
+workflow_notes:
+  - "[step -> script|AI -> output]"
+turns:
+  - turn: 1
+    question: "[what was asked]"
+    answer: "[user answer]"
+    timestamp: "ISO-8601"
+draft_changes:
+  - "[changes introduced during forge draft gate, if any]"
+example_placed: "[inline | references/Example.md]"
+example_generated: false
+completed: true
+coverage:
+  essential_schema:
+    intent: true
+    scope: true
+    mechanism: true
+    context_assets: true
+    tier: true
+    target_path: true
+    workflow_notes: true
+    example_placed: true
+    example_generated: true
+  unanswered_branches: []
+last_backtrack_turn: null

@@ -1,0 +1,14 @@
+# Untracked, entries here are usually in a trash state for dev
+.opencode/
+.agents/
+skills-lock.json
+
+# Ignore test output
+*-iteration-*-eval-report.html
+*-skill-check-report.html
+
+# Python
+__pycache__/
+*.py[codz]
+
+node_modules

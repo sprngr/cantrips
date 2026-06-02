@@ -1,0 +1,31 @@
+intent: "Create deterministic changelog quality checker"
+scope: "moderate"
+mechanism: "hybrid"
+context_assets: "checklists"
+target_path: "skills/changelog-quality-check/"
+tier: "B"
+workflow_notes:
+  - "read pending changelog entries -> script validation -> flagged report"
+turns:
+  - turn: 1
+    question: "What is core capability?"
+    answer: "Validate changelog entries for format and release readiness"
+    timestamp: "2026-05-31T10:00:00Z"
+draft_changes: []
+example_placed: "references/Example.md"
+example_generated: false
+completed: false
+coverage:
+  essential_schema:
+    intent: true
+    scope: true
+    mechanism: true
+    context_assets: true
+    tier: true
+    target_path: true
+    workflow_notes: true
+    example_placed: true
+    example_generated: true
+  unanswered_branches:
+    - "workflow_refinement"
+last_backtrack_turn: null

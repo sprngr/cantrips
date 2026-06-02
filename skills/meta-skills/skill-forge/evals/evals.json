@@ -1,0 +1,84 @@
+{
+  "skill_name": "skill-forge",
+  "evals": [
+    {
+      "id": "import-completed-plan",
+      "prompt": "Forge a skill bundle from skills/commit-linter/.skill-plan.yaml.",
+      "expected_output": {
+        "description": "skill-forge imports completed plan, prints summary, and asks for generation confirmation before drafting.",
+        "artifacts": ["outputs/decision_log.txt"],
+        "assertions": [
+          "Output includes intent, scope, mechanism, tier, and target path summary",
+          "Output asks 'Proceed to generate bundle? [yes/no]'",
+          "Output does not ask discovery interview questions (intent/scope/mechanism/context/path turns)",
+          "No resume-turn logic appears in output"
+        ]
+      },
+      "files": []
+    },
+    {
+      "id": "reject-incomplete-plan",
+      "prompt": "Forge from an input plan where completed: false.",
+      "expected_output": {
+        "description": "skill-forge rejects incomplete plan and routes user back to planning/refinement before generation.",
+        "artifacts": ["outputs/error.txt"],
+        "assertions": [
+          "Output flags that completed must be true",
+          "Output asks user to complete planning via skill-plan/skill-refine",
+          "No drafting or file write begins"
+        ]
+      },
+      "files": []
+    },
+    {
+      "id": "redirect-semantic-plan-changes",
+      "prompt": "After blueprint, user asks to change mechanism from scripts to hybrid and scope from moderate to extended.",
+      "expected_output": {
+        "description": "skill-forge refuses to mutate plan semantics inline and redirects user upstream.",
+        "artifacts": ["outputs/decision_log.txt"],
+        "assertions": [
+          "Output identifies request as plan-semantic change",
+          "Output redirects to skill-refine or skill-wizard/skill-plan",
+          "Output tells user to rerun skill-forge after patching .skill-plan.yaml"
+        ]
+      },
+      "files": []
+    },
+    {
+      "id": "tier-b-generate-from-plan",
+      "prompt": "Using a completed Tier B plan, generate skill bundle and write artifacts.",
+      "expected_output": {
+        "description": "skill-forge produces Tier B bundle from plan, runs quality checks, generates example, and writes outputs.",
+        "artifacts": [
+          "outputs/SKILL.md",
+          "outputs/scripts/*.sh",
+          "outputs/references/Example.md",
+          "outputs/.skill-plan.yaml"
+        ],
+        "assertions": [
+          "SKILL.md frontmatter includes name and description",
+          "SKILL.md instructions are imperative and clarity-checked",
+          "Tier B output includes scripts/ and references/Example.md",
+          ".skill-plan.yaml retains completed: true",
+          ".skill-plan.yaml updates example_generated: true"
+        ]
+      },
+      "files": []
+    },
+    {
+      "id": "anti-pattern-conditional-push",
+      "prompt": "Generate from plan where workflow draft includes if/else conditional wall.",
+      "expected_output": {
+        "description": "skill-forge moves conditional wall into script and replaces SKILL.md step with a single script call.",
+        "artifacts": ["outputs/SKILL.md", "outputs/scripts/*", "outputs/.skill-plan.yaml"],
+        "assertions": [
+          "Output reports conditional wall detection",
+          "Generated scripts/ contains helper handling pushed conditional",
+          "SKILL.md contains single imperative script-call step instead of if/else prose",
+          ".skill-plan.yaml draft_changes[] records the push"
+        ]
+      },
+      "files": []
+    }
+  ]
+}

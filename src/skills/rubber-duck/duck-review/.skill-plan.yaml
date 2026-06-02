@@ -1,0 +1,51 @@
+# .skill-plan.yaml - Planning state artifact produced by skill-wizard
+intent: "Produce terse, paste-ready PR review comments with risk-aware prefixes and fix direction."
+scope: "moderate"
+mechanism: "reasoning"
+context_assets: "templates"
+target_path: "skills/rubber-duck/duck-review/"
+tier: "B"
+workflow_notes:
+  - "Validate review input exists (diff/PR/code) before emitting findings."
+  - "Prioritize findings by risk: security -> correctness -> data integrity -> performance -> tests -> docs."
+  - "Emit one-line comments in template: <prefix> <path[:line]> — <problem>. Fix: <smallest safe change>."
+  - "Switch to full paragraph only for security/irreversible-risk clarity, then resume terse mode."
+  - "If no concrete target, ask one clarifying request instead of fabricating findings."
+turns:
+  - turn: 1
+    question: "What is primary capability for this skill?"
+    answer: "Rubber duck code review comments with strict one-line format and severity prefixes."
+    timestamp: "2026-05-29T00:00:00Z"
+  - turn: 2
+    question: "What scope fits best?"
+    answer: "moderate"
+    timestamp: "2026-05-29T00:00:00Z"
+  - turn: 3
+    question: "Which mechanism should run core logic?"
+    answer: "reasoning"
+    timestamp: "2026-05-29T00:00:00Z"
+  - turn: 4
+    question: "What static context assets are needed?"
+    answer: "templates"
+    timestamp: "2026-05-29T00:00:00Z"
+  - turn: 5
+    question: "Where should plan target be saved?"
+    answer: "skills/rubber-duck/duck-review/"
+    timestamp: "2026-05-29T00:00:00Z"
+draft_changes: []
+example_placed: "references/Example.md"
+example_generated: false
+completed: true
+coverage:
+  essential_schema:
+    intent: true
+    scope: true
+    mechanism: true
+    context_assets: true
+    tier: true
+    target_path: true
+    workflow_notes: true
+    example_placed: true
+    example_generated: true
+  unanswered_branches: []
+last_backtrack_turn: null

@@ -1,0 +1,19 @@
+# .skill-plan.patch.yaml
+version: 1
+base_plan: "./.skill-plan.yaml"
+generated_at: "ISO-8601"
+source_reports:
+  - "./skill-check-report.html"
+  - "./eval-report.html"
+operations:
+  - id: "op-001"
+    priority: "P0"
+    source:
+      report_type: "skill-check"
+      finding_id: "spec:description_valid"
+    action: "replace"
+    path: "intent"
+    before: "old intent"
+    after: "new concise intent"
+    rationale: "Align intent with eval failures and scope"
+    status: "approved"

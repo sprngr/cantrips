@@ -1,0 +1,11 @@
+SKILL.md
+assets/changelog-template.md
+assets/plan-patch-template.yaml
+assets/report-schema.json
+references/Example.md
+references/change-proposal-format.md
+references/priority-rules.md
+scripts/diff-snapshot.sh
+scripts/parse-report.sh
+scripts/parse_report.py
+scripts/validate-plan.sh

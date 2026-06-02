@@ -1,0 +1,36 @@
+# .skill-plan.yaml - Completed planning artifact consumed by skill-forge
+intent: "Audit & validate agent skills against agentskills.io spec, best-practices, and skills-ref impl"
+scope: "moderate"
+mechanism: "hybrid"
+context_assets: "checklists"
+target_path: "skills/meta-skills/skill-check/"
+tier: "B"
+workflow_notes: []
+turns:
+  - turn: 1 (intent)
+    answer: "Audit & validate agent skills against agentskills.io spec, best-practices, and skills-ref impl"
+  - turn: 2 (scope)
+    answer: "moderate pipeline (Tier B)"
+  - turn: 3 (mechanism)
+    answer: "hybrid (scripts + reasoning)"
+  - turn: 4 (context_assets)
+    answer: "checklists + templates in references/"
+  - turn: 5 (target_path)
+    answer: "/mnt/f/workspace/cantrips/skills/skill-check"
+draft_changes: []
+example_placed: "references/Example.md"
+example_generated: true
+completed: true
+coverage:
+  essential_schema:
+    intent: true
+    scope: true
+    mechanism: true
+    context_assets: true
+    tier: true
+    target_path: true
+    workflow_notes: true
+    example_placed: true
+    example_generated: true
+  unanswered_branches: []
+last_backtrack_turn: null
