@@ -1,0 +1,19 @@
+{
+  "name": "{{PROJECT_NAME}}",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">={{NODE_VERSION}}"
+  },
+  "scripts": {
+    "dev": "node src/server.js",
+    "start": "node src/server.js",
+    "build": "echo \"no build step\"",
+    "lint": "echo \"configure linter\"",
+    "test": "echo \"configure tests\""
+  },
+  "dependencies": {
+    "{{BACKEND_DEP_NAME}}": "{{BACKEND_DEP_VERSION}}"
+  }
+}

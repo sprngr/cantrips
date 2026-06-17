@@ -1,0 +1,12 @@
+FROM node:{{NODE_VERSION}}-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN {{PM_INSTALL_CMD}}
+
+COPY . .
+
+EXPOSE {{API_PORT}}
+
+CMD ["{{PM_EXEC}}", "{{PM_RUN}}", "start"]

@@ -1,0 +1,65 @@
+# .skill-plan.yaml - Planning state artifact produced by skill-wizard
+intent: "Initialize dockerized Node.js boilerplate from guided inputs, with optional frontend starter path, template-asset references for generated boilerplate files, and official documentation links for selected packages/tools."
+scope: "extended"
+mechanism: "hybrid"
+context_assets: "templates"
+target_path: "src/skills/experimental/docker-node-init/"
+tier: "C"
+workflow_notes:
+  - "collect init inputs -> AI -> init-spec.json"
+  - "resolve boilerplate asset templates -> script -> template-map for package.json, Dockerfile, docker-compose.yml, .dockerignore, .gitignore, .env.example, README.md"
+  - "resolve official documentation references for selected stack -> AI -> docs-map with package/tool names and canonical URLs"
+  - "scaffold node project + docker files from references -> script -> package.json, Dockerfile, docker-compose.yml, .dockerignore, .gitignore"
+  - "determine frontend choice from reference options -> AI -> frontend-plan decision"
+  - "stub frontend starter when chosen -> script -> frontend/ tree + docker config"
+  - "write env/docs + initial commands with doc links -> script -> .env.example, README.md quickstart + references section"
+  - "final recap + next steps -> AI -> setup summary"
+turns:
+  - turn: 1
+    question: "Recommend deep based on request signals. Choose mode: quick or deep."
+    answer: "deep"
+    timestamp: "2026-06-06T00:00:00Z"
+  - turn: 2
+    question: "Pick scope: single, moderate, or extended?"
+    answer: "extended (multi-stage orchestration)"
+    timestamp: "2026-06-06T00:00:00Z"
+  - turn: 3
+    question: "Pick mechanism: reasoning, scripts, or hybrid?"
+    answer: "hybrid"
+    timestamp: "2026-06-06T00:00:00Z"
+  - turn: 4
+    question: "List workflow steps in order; for each mark AI or script + output artifact."
+    answer: "asked for boundary-map example before final workflow list"
+    timestamp: "2026-06-06T00:00:00Z"
+  - turn: 5
+    question: "List your real workflow steps in same format."
+    answer: "provided 6-step AI/script boundary map with outputs"
+    timestamp: "2026-06-06T00:00:00Z"
+  - turn: 6
+    question: "Pick context_assets: none, schema, templates, checklists, or manuals?"
+    answer: "templates (primary)"
+    timestamp: "2026-06-06T00:00:00Z"
+  - turn: 7
+    question: "Confirm target_path."
+    answer: "src/skills/experimental/docker-node-init/"
+    timestamp: "2026-06-06T00:00:00Z"
+draft_changes:
+  - "No conditional wall detected; workflow kept in SKILL.md without script pushdown."
+  - "Expanded workflow outputs to include template-map and docs-map references per user feedback."
+  - "Added references for boilerplate asset templates and official package documentation index."
+example_placed: "references/Example.md"
+example_generated: true
+completed: true
+coverage:
+  essential_schema:
+    intent: true
+    scope: true
+    mechanism: true
+    context_assets: true
+    tier: true
+    target_path: true
+    workflow_notes: true
+    example_placed: true
+    example_generated: true
+  unanswered_branches: []
+last_backtrack_turn: null

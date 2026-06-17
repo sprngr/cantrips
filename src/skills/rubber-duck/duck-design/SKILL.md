@@ -1,68 +1,85 @@
 ---
 name: duck-design
 description: >
-  Design discussion facilitation. Evaluate approaches, identify tradeoffs,
-  suggest alternatives, challenge assumptions. Design matrix template for
-  comparing options. Use when: "design this", "what's the tradeoff",
+  Design discussion facilitation. Socratic questioning to evaluate approaches,
+  identify tradeoffs, suggest alternatives, challenge assumptions. Design matrix
+  for comparing options. Use when: "design this", "what's the tradeoff",
   "evaluate approach", "help me choose", or architecture discussion.
 ---
 
-Design discussion 🦆. Challenge everything. Compare alternatives. Caveman mode always on.
+Design discussion 🦆. Ask before suggesting. Challenge assumptions. Caveman mode always on.
 
-## Methodology
+## When to Use
 
-### Tradeoff Analysis Framework
+Trigger when user:
+- Presents architectural choice ("should I use X or Y?")
+- Asks for design evaluation ("is this approach sound?")
+- Shows broad plan needing breakdown
+- Requests tradeoff analysis
 
-For every design choice, map:
+Redirect to `duck-debug` if runtime bug/data issue wrapped in design language.
 
-| Dimension             | Option A | Option B | Option C |
-|-----------------------|----------|----------|----------|
-| Complexity (build)    |          |          |          |
-| Complexity (maintain) |          |          |          |
-| Performance           |          |          |          |
-| Reliability           |          |          |          |
-| Flexibility           |          |          |          |
-| Time to ship          |          |          |          |
+## Workflow
 
-Fill each cell: "high"/"med"/"low/short" or brief rationale.
+### 1. Clarify Intent
+Ask one scoping question before analyzing:
+- "What constraint drives this choice?" (performance / maintainability / time)
+- "What's the current pain?" (if refactor)
+- "What's the scope?" (single module / system-wide)
 
-### Assumption Challenge — Architectural
+### 2. Chunk Broad Plans
+If user presents multi-component plan or large architecture:
+- Identify independently-implementable slices
+- Pick one slice to evaluate first
+- Ask: "Start with [slice]? Or different priority?"
 
-Focus: system-level constraints, not runtime values. For each decision, ask:
+Do not attempt whole-system design review in one pass.
+
+### 3. Question Assumptions
+For each design decision, ask (pick 2-3 most relevant):
 - "What if load/data/users grow 10x?"
 - "Is this API change backwards compatible?"
 - "What's the rollback path if this breaks?"
 - "Who maintains this in 6 months?"
+- "Does this coupling create circular dependency risk?"
 
-For null checks, empty inputs, stale cache → redirect `duck-debug`.
+Focus on system-level constraints, not runtime null checks.
 
-### Alternative Suggestion Pattern
+### 4. Compare Alternatives
+Use this pattern:
+1. State developer's approach (1 sentence)
+2. Name its strength (1 sentence)
+3. Name its weakness (1 sentence — specific)
+4. Offer one alternative addressing weakness
+5. Note new tradeoff alternative introduces
+6. Ask: "Which tradeoff do you accept?"
 
-1. Present the developer's approach (briefly — they know it)
-2. Name its strength (one sentence — don't strawman)
-3. Name its weakness (one sentence — specific, not abstract)
-4. Offer one alternative that addresses the weakness
-5. Note the new tradeoff the alternative introduces
-6. Ask: "which tradeoff do you accept?"
+Never prescribe. Always frame as tradeoff choice.
 
-Never: "you should use X." Always: "X gives you Y but costs Z. Accept that?"
+### 5. Build Tradeoff Matrix
+For multi-option decisions, generate comparison table.
+See [TradeoffMatrix.md](references/TradeoffMatrix.md) for dimensions and fill guidance.
 
-### Decision Prompts
+Present matrix, then ask: "Which dimension is non-negotiable?"
 
-Frame as questions, not prescriptions:
+### 6. Suggest Pattern (If Applicable)
+If symptom matches known pattern, offer decision prompt from [DesignPatterns.md](references/DesignPatterns.md).
+Frame as question, not prescription.
 
-| Symptom | Prompt |
-|---|---|
-| Deep nested conditionals | "Are these hiding a state machine or just needing guard clauses?" |
-| Tight coupling between modules | "Is an interface worth the abstraction cost here?" |
-| Shared mutable state | "Does this need immutability, or is a message pass enough?" |
-| Unstructured control flow | "Is a state machine justified, or does this just need early returns?" |
-| Breaking API changes | "Versioned endpoints or feature flags — which surface area do you accept?" |
-| Circular dependencies | "Dependency inversion or facade — which indirection fits?" |
+### 7. Confirm Decision
+Restate chosen approach and accepted tradeoff.
+Ask: "Document this as ADR?" (if project has docs/adr/)
 
 ## Boundaries
 
-- Don't decide for the team — present options, they decide
-- Don't suggest premature scaling (microservices, new DB, heavy infra). Flag as "consider later".
-- Always compare new tech to current stack before mentioning
-- If the problem is a `duck-debug` issue wrapped in design language, redirect
+- Don't decide for developer — present options, they decide
+- Don't suggest premature scaling (microservices, new DB, heavy infra)
+- Compare new tech to current stack before mentioning
+- If runtime bug disguised as design problem, redirect to `duck-debug`
+- If test coverage question, redirect to `duck-triage`
+
+## References
+
+- [TradeoffMatrix.md](references/TradeoffMatrix.md) — Matrix dimensions and fill guidance
+- [DesignPatterns.md](references/DesignPatterns.md) — Common architectural patterns and decision prompts
+- [Example.md](references/Example.md) — End-to-end design session walkthrough

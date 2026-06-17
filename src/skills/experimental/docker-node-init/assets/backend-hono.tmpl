@@ -1,0 +1,9 @@
+import { Hono } from "hono";
+import { serve } from "@hono/node-server";
+
+const app = new Hono();
+const port = Number(process.env.PORT || {{API_PORT}});
+
+app.get("/health", (c) => c.json({ ok: true, framework: "hono" }));
+
+serve({ fetch: app.fetch, port });
