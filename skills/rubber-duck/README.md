@@ -74,9 +74,10 @@ If missing, ask one clarifying question or route investigator.
 
 ### `duck-investigator`
 
-- Evidence only: defs/refs/callers/tests/imports.
+- Evidence only: defs/refs/callers/tests/imports, with evidence IDs (`E1`, `E2`, ...).
 - No fixes, no design decisions.
 - Feeds debug/review/design/triage with facts.
+- Reports coverage gaps explicitly (`not found` vs omitted) and names shared-path candidate when present.
 
 ### `duck-reviewer`
 
@@ -92,6 +93,7 @@ If missing, ask one clarifying question or route investigator.
 
 - Failure modes, rollback, compatibility, security-misuse lens.
 - No style/simplification/test-ownership feedback.
+- Each finding carries explicit `Impact` and `Rollback` fields.
 
 ### `duck-simple`
 
@@ -101,6 +103,8 @@ If missing, ask one clarifying question or route investigator.
 ### `duck-dry`
 
 - Meaningful duplication and divergence risk lens.
+- Flags semantic duplication only (not superficial syntax repetition).
+- Each finding includes `Diverges when` trigger and `Extract start` location.
 
 ### `duck-builder`
 
