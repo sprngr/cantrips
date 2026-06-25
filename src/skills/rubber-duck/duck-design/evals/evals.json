@@ -1,0 +1,49 @@
+{
+  "skill_name": "duck-design",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Design review: compare two options only for current system (200 req/min, team 3): (A) keep modular monolith, (B) split checkout and inventory into two services. Help us choose.",
+      "expected_output": "Response asks one scoping question first, runs compare-alternatives structure (strength/weakness + one alternative), and ends with exact tradeoff-choice question instead of broad-plan chunking.",
+      "assertions": [
+        "Response contains at least one direct scoping question using '?'",
+        "Response contains quoted terms 'strength' and 'weakness'",
+        "Response contains quoted phrase 'Which tradeoff do you accept?'",
+        "Response contains quoted term 'non-negotiable'"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I think architecture wrong: checkout API returns 500 when coupon missing. Should we move pricing logic into separate service?",
+      "expected_output": "Response recognizes runtime bug framing and redirects to duck-debug, instead of deep architecture redesign.",
+      "assertions": [
+        "Response contains quoted term 'duck-debug'",
+        "Response contains quoted term 'runtime bug'",
+        "Response contains at least one follow-up question using '?'"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Design this.",
+      "expected_output": "Response handles malformed/underspecified prompt by asking exactly one scoping question and avoiding premature recommendations.",
+      "assertions": [
+        "Response contains exactly one question mark",
+        "Response contains max 8 words before question mark",
+        "Response contains quoted term 'constraint'",
+        "Response contains at least one clarification question about scope or constraint",
+        "Response does not contain concrete technology prescription like 'use microservices'"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Plan: replace monolith, rewrite auth, change database, add event bus, and create new analytics pipeline in one quarter. Please evaluate full architecture now.",
+      "expected_output": "Response chunks broad plan into slices, requests priority for first slice, and avoids reviewing whole system in one pass.",
+      "assertions": [
+        "Response contains quoted term 'slice'",
+        "Response contains quoted phrase 'Start with'",
+        "Response contains quoted phrase 'different priority'",
+        "Response contains at least one explicit tradeoff word 'tradeoff'"
+      ]
+    }
+  ]
+}
