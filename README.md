@@ -17,7 +17,7 @@ npx skills add JuliusBrussee/caveman
 
 ## Quickstart
 
-Install full repo skill set from a compatible runtime:
+Install repo skill set from a compatible runtime:
 
 ```bash
 npx skills add sprngr/cantrips --full-depth
@@ -33,6 +33,11 @@ Install included agents (path depends on harness):
 
 ```bash
 cp /path/to/cantrips/agents/*.agent.md /path/to/harness/agents/
+```
+
+Install AGENTS.md (path depends on harness):
+```bash
+cp /path/to/cantrips/AGENTS.md /path/to/harness/AGENTS.md
 ```
 
 ## Skill development workflow (`src/skills` -> `skills`)

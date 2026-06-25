@@ -19,11 +19,13 @@ Quick reference for routing and handoffs for a suite of development skills that 
   - `src/skills/rubber-duck/duck-review/SKILL.md`
   - `src/skills/rubber-duck/duck-teach/SKILL.md`
   - `src/skills/rubber-duck/duck-triage/SKILL.md`
+  - `src/skills/rubber-duck/duck-debt/SKILL.md`
 
 ## Router quick map
 
 - Review input (diff/code): start `duck-review`; chain `duck-reviewer` + `duck-adversary` + `duck-simple` (+`duck-dry` on duplication signal; `duck-triage` on test-gap signal).
 - Debug input (code + complaint): start `duck-debug`; chain `duck-investigator`; escalate `duck-triage` if repro weak; use `duck-builder` only for explicit bounded patch requests.
+- Soft preflight before patching: confirm target path, expected behavior, and smallest shared fix location; if missing, ask one clarifying question or route investigator.
 - Explain input (snippet/path/log): start `duck-explain`; hand off to `duck-debug` for root-cause hunt, or `duck-review` for review output.
 - Design/tradeoff: start `duck-design`; chain `duck-simple` + `duck-adversary` (+`duck-dry` when shared-rule duplication appears).
 - Teach/how-it-works: `duck-teach`; hand off to `duck-debug` or `duck-review` if issue/review request emerges.
@@ -49,6 +51,17 @@ For exact prefixes/output rules, see each agent file directly.
 - `duck-review`: review workflow + output contract source of truth. Used by `duck-reviewer`.
 - `duck-teach`: structured tutorial generation. Handoff to `duck-debug` or `duck-review` when needed.
 - `duck-triage`: test-gap and severity triage. Handoff inline review comments to `duck-review`.
+- `duck-debt`: scans `duck-debt:` markers and emits shortcut ledger (ceiling + trigger).
+
+## Shared policy (all duck skills)
+
+Use ladder before new code:
+1) Need change at all?
+2) Reuse existing local helper/pattern?
+3) Stdlib/native available?
+4) Installed dependency already solves?
+5) Smallest safe bounded diff.
+6) Only then add new abstraction/code.
 
 ## Related docs
 

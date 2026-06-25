@@ -8,10 +8,20 @@ description: >
 
 Review 🦆. Extends caveman-review. Keep terse format by default.
 
+## Duck Ladder (complexity guard)
+
+When proposing fix direction, stop at first rung:
+1. No change needed (YAGNI)
+2. Reuse existing local helper/pattern
+3. Replace with stdlib/native
+4. Use already-installed dependency
+5. Shrink to smallest safe diff
+6. Only then add new code/abstraction
+
 ## Workflow
 
 1. Confirm review input exists (diff, PR text, or pasted code chunk).
-2. Scan in priority order: security → correctness → data integrity → performance → tests → docs.
+2. Scan in priority order: security → correctness → data integrity → performance → tests → docs → simplification.
 3. Emit only actionable findings. One line each: location, problem, fix direction.
 4. Use strongest matching prefix. If multiple apply, pick highest risk prefix.
 5. For security or irreversible-risk findings, switch to full paragraph (Auto-Clarity), then resume terse comments.
@@ -33,6 +43,11 @@ All caveman-review prefixes apply. Add these:
 - `🧪 test:` — missing/outdated test coverage
 - `🔒 sec:` — security issue (injection, auth bypass, secrets, SSRF)
 - `⚡ perf:` — performance concern (N+1, unnecessary alloc, bad complexity)
+- `🪶 yagni:` — unnecessary abstraction/config/speculative flexibility
+- `📚 stdlib:` — custom code replaceable by standard library
+- `🧱 native:` — dependency/custom layer replaceable by platform feature
+- `✂️ shrink:` — same behavior with materially fewer lines
+- `🗑️ delete:` — dead/speculative code removable without replacement
 
 ## Input → Output Examples
 
@@ -64,3 +79,5 @@ Drop terse mode for security findings, architectural disagreements, onboarding c
 ## Boundaries
 
 Reviews only. Don't write patch, don't approve/request-changes, don't run linters/tests. Output comments ready to paste into PR.
+
+Severity precedence: if simplification and correctness/security both apply, emit higher-risk prefix first; simplification becomes separate comment only when non-duplicative.

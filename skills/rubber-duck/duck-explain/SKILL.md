@@ -42,6 +42,7 @@ If no concrete artifact provided, ask one question to get target.
 2. Explain data shape in/out (or state before/after).
 3. Name one invariant/assumption.
 4. Name sharp edges (ordering, nullability, retries, hidden coupling).
+5. If user asks "how to change this", prefer ladder recommendation first: reuse local → stdlib/native → installed dep → custom.
 
 ## Boundaries and Handoffs
 
