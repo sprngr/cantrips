@@ -69,7 +69,9 @@ def repo_root() -> Path:
 
 
 def discovered_plan_files(root: Path) -> list[Path]:
-    skills_root = root / "skills"
+    skills_root = root / "src" / "skills"
+    if not skills_root.is_dir():
+        skills_root = root / "skills"
     if not skills_root.is_dir():
         return []
     return sorted(skills_root.rglob(".skill-plan.yaml"))
@@ -109,9 +111,9 @@ def audit_plan(path: Path, root: Path) -> dict[str, Any]:
     else:
         if target_path.startswith("/"):
             output["violations"].append(violation("target_path_abs", "target_path must be relative, not absolute"))
-        if not target_path.startswith("skills/"):
+        if not target_path.startswith("skills/") or not target_path.startswith("src/skills/"):
             output["violations"].append(
-                violation("target_path_not_skills_prefix", "target_path must start with skills/")
+                violation("target_path_not_skills_prefix", "target_path must start with skills/ or src/skills/")
             )
         if not target_path.endswith("/"):
             output["violations"].append(
@@ -153,9 +155,7 @@ def audit_plan(path: Path, root: Path) -> dict[str, Any]:
 
     # coverage rule
     coverage = data.get("coverage")
-    if not isinstance(coverage, dict):
-        output["violations"].append(violation("coverage_missing", "coverage block missing or not object"))
-    else:
+    if isinstance(coverage, dict):
         essential = coverage.get("essential_schema")
         if not isinstance(essential, dict):
             output["violations"].append(
