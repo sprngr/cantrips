@@ -3,7 +3,7 @@ scope: moderate
 mechanism: reasoning
 context_assets: none
 tier: B
-target_path: src/skills/rubber-duck/duck-design/
+target_path: skills/rubber-duck/duck-design/
 workflow_notes:
   - Update methodology to socratic approach
   - Add chunking pattern for broad plans (slice instead of addressing whole)
