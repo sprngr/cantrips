@@ -1,0 +1,42 @@
+# .skill-plan.patch.yaml
+version: 1
+base_plan: "./.skill-plan.yaml"
+generated_at: "2026-06-06T00:00:00Z"
+source_reports: []
+operations:
+  - id: "op-001"
+    priority: "P2"
+    source:
+      report_type: "user-feedback"
+      finding_id: "docs-stage-missing"
+    action: "replace"
+    path: "workflow_notes"
+    before:
+      - "collect init inputs -> AI -> init-spec.json"
+      - "scaffold node project + docker files from references -> script -> package.json, Dockerfile, docker-compose.yml, .dockerignore, .gitignore"
+      - "determine frontend choice from reference options -> AI -> frontend-plan decision"
+      - "stub frontend starter when chosen -> script -> frontend/ tree + docker config"
+      - "write env/docs + initial commands -> script -> .env.example, README.md quickstart"
+      - "final recap + next steps -> AI -> setup summary"
+    after:
+      - "collect init inputs -> AI -> init-spec.json"
+      - "resolve boilerplate asset templates -> script -> template-map for package.json, Dockerfile, docker-compose.yml, .dockerignore, .gitignore, .env.example, README.md"
+      - "resolve official documentation references for selected stack -> AI -> docs-map with package/tool names and canonical URLs"
+      - "scaffold node project + docker files from references -> script -> package.json, Dockerfile, docker-compose.yml, .dockerignore, .gitignore"
+      - "determine frontend choice from reference options -> AI -> frontend-plan decision"
+      - "stub frontend starter when chosen -> script -> frontend/ tree + docker config"
+      - "write env/docs + initial commands with doc links -> script -> .env.example, README.md quickstart + references section"
+      - "final recap + next steps -> AI -> setup summary"
+    rationale: "Add explicit stages for template asset mapping and official documentation mapping."
+    status: "approved"
+  - id: "op-002"
+    priority: "P2"
+    source:
+      report_type: "user-feedback"
+      finding_id: "asset-reference-goal-implicit"
+    action: "replace"
+    path: "intent"
+    before: "Initialize dockerized Node.js boilerplate from guided inputs, with optional frontend starter path."
+    after: "Initialize dockerized Node.js boilerplate from guided inputs, with optional frontend starter path, template-asset references for generated boilerplate files, and official documentation links for selected packages/tools."
+    rationale: "Make asset-reference and docs-link requirement explicit at plan source-of-truth level."
+    status: "approved"

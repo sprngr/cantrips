@@ -1,0 +1,32 @@
+intent: Update existing duck-design skill with moderate coordinated changes to content and structure
+scope: moderate
+mechanism: reasoning
+context_assets: none
+tier: B
+target_path: src/skills/rubber-duck/duck-design/
+workflow_notes:
+  - Update methodology to socratic approach
+  - Add chunking pattern for broad plans (slice instead of addressing whole)
+  - Create reference file for design patterns
+  - Create reference file for tradeoff matrix section
+  - Expand example coverage
+example_placed: references/Example.md
+example_generated: true
+completed: true
+draft_changes:
+  - Added socratic clarification step before analysis
+  - Added chunking pattern for broad plans (step 2)
+  - Moved tradeoff matrix to reference file (reduced inline duplication)
+  - Added design patterns reference file
+  - Expanded workflow from implicit methodology to explicit numbered steps
+turns:
+  - q: "What's core intent for this planning session?"
+    a: "update existing duck-design skill"
+  - q: "What scope for update?"
+    a: "Moderate"
+  - q: "What mechanism?"
+    a: "Reasoning"
+  - q: "Where save `.skill-plan.yaml` and generated artifacts?"
+    a: "src/skills/rubber-duck/duck-design/"
+  - q: "What specific changes should update include?"
+    a: "Update methodology to be socratic; when presented with broad plan, chunk up into slices instead of trying to address the entire thing in one go. Add reference files for design patterns and trade off matrix section; add new example coverage"

@@ -1,0 +1,15 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "{{API_PORT}}:{{API_PORT}}"
+    environment:
+      - NODE_ENV=development
+      - PORT={{API_PORT}}
+    volumes:
+      - ./:/app
+      - /app/node_modules
+
+{{FRONTEND_SERVICE_BLOCK}}
