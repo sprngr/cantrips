@@ -39,11 +39,15 @@ Output:
 - one line per finding (shared pattern):
   `<prefix> <path[:line|scope]> — <complexity cost>. Fix: <smaller shape>.`
 - prefixes:
-  - `🟡 risk:` maintainability and readability risk
-  - `🔵 nit:` simplification with low immediate risk
+  - `🪶 yagni:` abstraction/config not justified yet
+  - `📚 stdlib:` custom code replaceable by standard library
+  - `🧱 native:` dependency/custom layer replaceable by platform feature
+  - `✂️ shrink:` same behavior in fewer lines
+  - `🗑️ delete:` dead/speculative code removable with no replacement
   - `❓ question:` missing intent blocks judgment
 - final line:
   `totals: <n> findings, <n> questions.`
+  `net: -<N> lines possible.`
 
 Rules:
 - no abstract "future flexibility" claims without concrete change
