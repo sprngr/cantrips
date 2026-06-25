@@ -111,7 +111,7 @@ def audit_plan(path: Path, root: Path) -> dict[str, Any]:
     else:
         if target_path.startswith("/"):
             output["violations"].append(violation("target_path_abs", "target_path must be relative, not absolute"))
-        if not target_path.startswith("skills/") or not target_path.startswith("src/skills/"):
+        if not target_path.startswith("skills/") and not target_path.startswith("src/skills/"):
             output["violations"].append(
                 violation("target_path_not_skills_prefix", "target_path must start with skills/ or src/skills/")
             )
