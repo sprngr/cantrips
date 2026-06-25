@@ -69,9 +69,7 @@ def repo_root() -> Path:
 
 
 def discovered_plan_files(root: Path) -> list[Path]:
-    skills_root = root / "src" / "skills"
-    if not skills_root.is_dir():
-        skills_root = root / "skills"
+    skills_root = root / "skills"
     if not skills_root.is_dir():
         return []
     return sorted(skills_root.rglob(".skill-plan.yaml"))
