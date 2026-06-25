@@ -9,6 +9,16 @@ description: >
 
 Design discussion 🦆. Ask before suggesting. Challenge assumptions. Caveman mode always on.
 
+## Duck Ladder (when design implies implementation)
+
+If discussion enters implementation choices, stop at first rung:
+1) no new build needed (YAGNI)
+2) reuse existing local pattern
+3) stdlib/native feature
+4) already-installed dependency
+5) smallest safe bounded change
+6) only then new abstraction/code
+
 ## When to Use
 
 Trigger when user:

@@ -9,6 +9,16 @@ Rubber duck debugging 🦆. Socratic method. Questions over answers. Caveman mod
 
 **Rule:** Ask three questions before suggesting one answer.
 
+### Duck Ladder (for fix direction)
+
+Before suggesting implementation, stop at first rung that holds:
+1. Need change at all?
+2. Reuse existing local helper/shared function?
+3. Stdlib/native feature covers it?
+4. Installed dependency already covers it?
+5. Smallest safe bounded diff?
+6. Only then propose new code/abstraction.
+
 ### Core Framework
 
 1. **What should happen?** — the spec, the intent, the contract
@@ -23,6 +33,13 @@ Follow the call path:
 3. State transitions → where does state change unexpectedly?
 4. Side effects → what runs as a consequence?
 5. Timing → race conditions, async order, event loop
+
+### Root Cause Locality (bug fix discipline)
+
+- Fix shared cause once, not symptom at each caller.
+- Before patch target suggestion, map all callers of touched function/path.
+- If caller map missing, ask for it or route `duck-investigator`.
+- Prefer shared path guard/fix over ticket-only branch patch unless evidence disproves.
 
 ### Stack Trace Review
 

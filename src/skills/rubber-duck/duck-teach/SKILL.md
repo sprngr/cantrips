@@ -30,6 +30,7 @@ All tutorials follow this skeleton:
 
 - Use workspace tech stack — don't default to a different language/framework
 - Prefer real project usage patterns over generic samples
+- Prefer ladder order in examples: reuse local → stdlib/native → installed dep → custom code last
 
 - Annotate inline with `// ←` for critical lines
 - Keep examples under 30 lines. Split complex examples into "minimal" and "complete"
