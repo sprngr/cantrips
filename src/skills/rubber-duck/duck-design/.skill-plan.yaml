@@ -30,3 +30,16 @@ turns:
     a: "src/skills/rubber-duck/duck-design/"
   - q: "What specific changes should update include?"
     a: "Update methodology to be socratic; when presented with broad plan, chunk up into slices instead of trying to address the entire thing in one go. Add reference files for design patterns and trade off matrix section; add new example coverage"
+
+coverage:
+  essential_schema:
+    intent: true
+    scope: true
+    mechanism: true
+    context_assets: true
+    tier: true
+    target_path: true
+    workflow_notes: true
+    example_placed: true
+    example_generated: true
+  unanswered_branches: []
