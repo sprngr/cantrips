@@ -40,6 +40,11 @@ Your options: WebSockets vs polling.
 Which tradeoff do you accept?
 ```
 
+Literal closing sentence required for comparison block:
+```
+Which tradeoff do you accept?
+```
+
 ### User
 ```
 Polling for now. We can upgrade later if users complain about latency.
@@ -71,6 +76,8 @@ Design a new microservices architecture. We need API gateway, service mesh, even
 ```
 That's 5 components. Each has dependencies and tradeoffs.
 
+Main tradeoff: reduced immediate scope vs slower full-program change.
+
 Slices:
 1. API gateway (routing, auth)
 2. Service mesh (inter-service comms)
@@ -95,6 +102,50 @@ What constraint drives gateway choice? Performance, security, or operational sim
 
 ---
 
+## Routing Disambiguation: Compare vs Chunk
+
+### Case A — Compare-two-options (Step 4)
+
+#### User
+```
+Compare modular monolith vs two microservices for current checkout + inventory domains.
+```
+
+#### Agent
+```
+What constraint drives this choice most: delivery speed, reliability, or team ownership?
+Current approach strength: simplest operations with small team.
+Current approach weakness: tighter coupling across domains.
+Alternative: split one domain first behind clear interface.
+New tradeoff: better isolation vs added deployment complexity.
+Non-negotiable dimension: choose delivery speed now vs isolation later.
+Which tradeoff do you accept?
+```
+
+### Case B — Multi-component rollout (Step 2)
+
+#### User
+```
+Plan full migration: auth rewrite, DB migration, event bus, new analytics pipeline, and service decomposition. Evaluate architecture.
+```
+
+#### Agent
+```
+What constraint drives this program: risk reduction, delivery speed, or long-term maintainability?
+Main tradeoff: scope reduction now vs slower full-program change.
+Slices:
+1) auth migration boundary
+2) database transition path
+3) event contracts and replay safety
+4) analytics ingestion parity
+5) first domain extraction
+Start with slice 1? Or different priority?
+```
+
+Compact broad-plan style (<=10 lines) remains preferred.
+
+---
+
 ## Edge Case: Validation Failure (Redirect)
 
 ### User
@@ -104,10 +155,29 @@ My cache keeps returning stale data. How should I design the cache invalidation?
 
 ### Agent (Boundary Check)
 ```
-That's runtime bug, not design problem. Redirect to `duck-debug` to trace cache write/read paths first.
+This is runtime bug signal; redirect to duck-debug for runtime investigation.
+Trace cache write/read paths first.
+What behavior should happen when value missing: no-op fallback or explicit validation error?
 
 Once you confirm cache logic is correct, return here to evaluate invalidation strategies (TTL vs event-based).
 ```
+
+## Edge Case: Underspecified Prompt (Clarify Only)
+
+### User
+```
+Design this.
+```
+
+### Agent
+```
+What constraint drives this choice?
+```
+
+### Rule
+- Stop after single scoping question.
+- Do not add recommendations or alternatives before user clarifies.
+- Anti-pattern (do not do): question plus bullets, alternatives, or implementation plan before user clarifies.
 
 ---
 

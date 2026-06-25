@@ -63,6 +63,53 @@ def check_contains(text: str, output_dir: str) -> tuple[bool, str]:
     return found, f"Scanned {len(combined)} chars. Target terms {'found' if found else 'not found'}"
 
 
+def _read_output_text(output_dir: str) -> str:
+    chunks = []
+    for f in sorted(glob.glob(os.path.join(output_dir, "*"))):
+        if os.path.isfile(f):
+            try:
+                with open(f, errors="ignore") as fh:
+                    chunks.append(fh.read())
+            except OSError:
+                pass
+    return "\n".join(chunks)
+
+
+def check_exactly_one_question_mark(text: str, output_dir: str) -> tuple[bool, str]:
+    """Check output has exactly one question mark."""
+    combined = _read_output_text(output_dir)
+    count = combined.count("?")
+    passed = count == 1
+    return passed, f"Found {count} question mark(s) in {len(combined)} chars"
+
+
+def check_max_words_before_qmark(text: str, output_dir: str) -> tuple[bool, str]:
+    """Check word count before first question mark is below threshold."""
+    combined = _read_output_text(output_dir).strip()
+    m = re.search(r"max\s+(\d+)\s+words?\s+before\s+question\s+mark", text.lower())
+    limit = int(m.group(1)) if m else 8
+
+    qidx = combined.find("?")
+    if qidx == -1:
+        return False, "No question mark found"
+
+    before = combined[:qidx]
+    words = re.findall(r"\b\w+\b", before)
+    count = len(words)
+    passed = count <= limit
+    return passed, f"Words before first '?': {count} (limit {limit})"
+
+
+def check_clarification_question(text: str, output_dir: str) -> tuple[bool, str]:
+    """Check output includes a clarification question about scope/constraint."""
+    combined = _read_output_text(output_dir)
+    lower = combined.lower()
+    has_q = "?" in combined
+    has_topic = any(t in lower for t in ["scope", "constraint"])
+    passed = has_q and has_topic
+    return passed, f"has_question={has_q}, has_scope_or_constraint={has_topic}"
+
+
 def classify_assertion(text: str) -> str:
     """Return which checker handles this assertion."""
     lower = text.lower()
@@ -70,6 +117,12 @@ def classify_assertion(text: str) -> str:
         return "file_exists"
     if any(w in lower for w in ["valid json", "json valid", "parseable json"]):
         return "valid_json"
+    if "exactly one question mark" in lower:
+        return "exactly_one_qmark"
+    if "max" in lower and "words before question mark" in lower:
+        return "max_words_before_qmark"
+    if "clarification question" in lower and ("scope" in lower or "constraint" in lower):
+        return "clarification_question"
     if any(w in lower for w in ["includes", "contains", "mentions", "label", "labeled", "has"]):
         return "contains"
     if any(w in lower for w in ["count", "at least", "contains", "has", "number", "exactly"]):
@@ -82,6 +135,9 @@ CHECKERS = {
     "valid_json": check_valid_json,
     "count": check_count,
     "contains": check_contains,
+    "exactly_one_qmark": check_exactly_one_question_mark,
+    "max_words_before_qmark": check_max_words_before_qmark,
+    "clarification_question": check_clarification_question,
 }
 
 PATTERN_MAP = {

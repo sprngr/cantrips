@@ -37,6 +37,31 @@ def stddev(values: list[float]) -> float:
     return math.sqrt(variance)
 
 
+def percentile(values: list[float], p: float) -> float:
+    """Simple percentile with linear interpolation."""
+    if not values:
+        return 0.0
+    if len(values) == 1:
+        return values[0]
+    s = sorted(values)
+    k = (len(s) - 1) * p
+    f = math.floor(k)
+    c = math.ceil(k)
+    if f == c:
+        return s[int(k)]
+    d0 = s[f] * (c - k)
+    d1 = s[c] * (k - f)
+    return d0 + d1
+
+
+def drop_high_outliers(values: list[float], p: float = 0.95) -> list[float]:
+    """Drop values above percentile threshold."""
+    if len(values) < 4:
+        return values
+    cutoff = percentile(values, p)
+    return [v for v in values if v <= cutoff]
+
+
 def extract_metrics(grading_list: list[dict], timing_list: list[dict]) -> dict:
     pass_rates = []
     tokens = []
@@ -53,6 +78,13 @@ def extract_metrics(grading_list: list[dict], timing_list: list[dict]) -> dict:
         tokens.append(t.get("total_tokens", 0))
         durations.append(t.get("duration_ms", 0))
 
+    # Reject obvious timing instrumentation artifacts.
+    original_duration_count = len(durations)
+    durations = [float(d) for d in durations if isinstance(d, (int, float)) and d > 0]
+
+    pre_outlier_count = len(durations)
+    durations_filtered = drop_high_outliers(durations, 0.95)
+
     return {
         "pass_rate": {
             "mean": round(mean(pass_rates), 4),
@@ -65,9 +97,12 @@ def extract_metrics(grading_list: list[dict], timing_list: list[dict]) -> dict:
             "samples": len(tokens),
         },
         "time_seconds": {
-            "mean": round(mean(durations) / 1000, 2),
-            "stddev": round(stddev(durations) / 1000, 2),
-            "samples": len(durations),
+            "mean": round(mean(durations_filtered) / 1000, 2),
+            "stddev": round(stddev(durations_filtered) / 1000, 2),
+            "samples": len(durations_filtered),
+            "raw_samples": len(durations),
+            "excluded_invalid_samples": original_duration_count - len(durations),
+            "excluded_outlier_samples": pre_outlier_count - len(durations_filtered),
         },
     }
 

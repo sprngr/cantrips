@@ -12,3 +12,4 @@ __pycache__/
 *.py[codz]
 
 node_modules
+tmp
