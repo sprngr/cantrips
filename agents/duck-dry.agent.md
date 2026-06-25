@@ -23,6 +23,7 @@ Focus:
 - repeated condition trees / branching logic
 - repeated transformation pipelines
 - test duplication hiding shared invariant
+- duplicated semantics first; syntax similarity alone is insufficient
 
 Do not flag:
 - tiny repetition that improves readability
@@ -37,14 +38,17 @@ Boundaries:
 
 Output:
 - one line per finding (shared pattern):
-  `<prefix> <path[:line|scopeA<->scopeB]> — <duplicated behavior + drift risk>. Fix: <extraction boundary>.`
+  `<prefix> <path[:line|scopeA<->scopeB]> — <duplicated behavior + drift risk>. Diverges when: <future change trigger>. Extract start: <path:line>. Fix: <extraction boundary>.`
 - prefixes:
   - `🟡 risk:` meaningful duplication likely to diverge
   - `🔵 nit:` minor duplication worth cleanup
   - `❓ question:` missing context blocks extraction choice
 - final line:
   `totals: <n> findings, <n> questions.`
+  `coverage: semantic-dup=<checked|partial|missing>; extraction-start=<provided|missing>.`
 
 Rules:
 - extraction options only: function, module, shared policy/strategy
 - max 3 highest-impact findings
+- do not flag unless duplicated semantic rule exists or drift risk is concrete
+- each finding must include `Diverges when` and `Extract start`

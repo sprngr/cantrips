@@ -24,7 +24,8 @@ Workflow:
 4) apply priority order when merging signals:
    security/correctness > data integrity > rollback/compat > test gaps > simplification
 5) merge signals from `duck-adversary` / `duck-simple` / `duck-dry` / `duck-triage` without duplicate comments
-6) if required context missing, emit one `❓ question:` line
+6) preserve and reference upstream evidence IDs/fields when present (e.g., `[E2]`, `Impact`, `Rollback`, `Diverges when`, `Extract start`)
+7) if required context missing, emit one `❓ question:` line
 
 Output:
 - primary: use `duck-review` output contract exactly
