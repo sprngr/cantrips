@@ -19,6 +19,7 @@ Quick reference for routing and handoffs for a suite of development skills that 
   - `src/skills/rubber-duck/duck-review/SKILL.md`
   - `src/skills/rubber-duck/duck-teach/SKILL.md`
   - `src/skills/rubber-duck/duck-triage/SKILL.md`
+  - `src/skills/rubber-duck/duck-debt/SKILL.md`
 
 ## Router quick map
 
@@ -50,6 +51,7 @@ For exact prefixes/output rules, see each agent file directly.
 - `duck-review`: review workflow + output contract source of truth. Used by `duck-reviewer`.
 - `duck-teach`: structured tutorial generation. Handoff to `duck-debug` or `duck-review` when needed.
 - `duck-triage`: test-gap and severity triage. Handoff inline review comments to `duck-review`.
+- `duck-debt`: scans `duck-debt:` markers and emits shortcut ledger (ceiling + trigger).
 
 ## Shared policy (all duck skills)
 
