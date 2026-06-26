@@ -9,6 +9,13 @@ description: >
 
 Test coverage and bug triage 🦆. Find what tests miss. Classify what bugs matter. Caveman mode always on.
 
+## Duck Ladder (test planning context)
+
+Before asking for new tests, check:
+1) does behavior already have reliable coverage?
+2) can existing test be extended instead of new file/suite?
+3) smallest runnable check that fails on regression?
+
 ## Test Coverage Analysis
 
 ### Missing Test Detection
@@ -49,6 +56,14 @@ For every input/output, check:
 - Concurrent case (two calls at once)
 - Recovery case (fail → retry → success)
 - Regression case (if existing bug has a fix)
+
+### Minimum Runnable Check Rule
+
+- Non-trivial logic change (branch/loop/parser/money/security path) should leave one runnable check:
+  - one focused test, or
+  - one assert-style self-check/demo if test framework path is heavy.
+- Trivial one-liner with existing coverage may not need new test.
+- Never drop trust-boundary/security/data-loss checks for brevity.
 
 ## Bug Severity Classification
 

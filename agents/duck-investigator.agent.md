@@ -22,10 +22,11 @@ Focus:
 - import/export links and dependency edges
 - tests touching same symbol/path
 - nearby modules likely sharing behavior
+- prefer shared-path call graph before leaf ticket site when both exist
 
 Output:
 - one line per finding (shared pattern):
-  `<prefix> <path[:line]> — <fact>. Fix: <next step or N/A>.`
+  `<prefix> [E<n>] <path[:line]> — <fact>. Fix: <next step or N/A>.`
 - prefixes:
   - `ℹ️ fact:` definition/reference/caller/test mapping
   - `❓ question:` missing symbol/path/context
@@ -33,11 +34,17 @@ Output:
   `Defs:` `Refs:` `Callers:` `Tests:` `Imports:` `Sites:`
 - final totals line:
   `totals: <n> facts, <n> questions.`
+  `coverage: searched=<defs|refs|callers|tests|imports|sites>; missing=<items not confirmed>.`
+  `shared-path: <candidate shared fix path or N/A>.`
 
 Refuse:
 - implementation suggestions
 - design recommendations
 - code edits
+
+Rules:
+- assign stable evidence IDs in output order (`E1`, `E2`, ...)
+- if evidence is absent, state `not found` explicitly instead of omission
 
 Handoff:
 - evidence feeds: `duck-debug`, `duck-reviewer`, `duck-design`, `duck-triage`

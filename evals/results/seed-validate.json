@@ -1,0 +1,20 @@
+{
+  "ok": true,
+  "generated_at": "2026-06-26T01:16:17.847Z",
+  "input": {
+    "cases": "/mnt/f/workspace/cantrips/evals/cases/rubber-duck.json"
+  },
+  "summary": {
+    "case_count": 10,
+    "category_counts": {
+      "review": 2,
+      "debug": 2,
+      "design": 2,
+      "triage": 2,
+      "debt": 1,
+      "builder": 1
+    },
+    "error_count": 0
+  },
+  "errors": []
+}

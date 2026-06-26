@@ -1,58 +1,287 @@
-# Rubber Duck 🦆
+# Rubber Duck 🦆 Operator Manual
 
-Quick reference for routing and handoffs for a suite of development skills that walk and quack like a duck.
+Operational guide for rubber-duck router, duckling subagents, and rubber-duck skills.
 
-## Topology
+## 1) System Map
 
-- Router: `agents/rubber-duck.agent.md` (picker name `🦆`)
-- Ducklings:
-  - `agents/duck-investigator.agent.md`
-  - `agents/duck-reviewer.agent.md`
-  - `agents/duck-adversary.agent.md`
-  - `agents/duck-simple.agent.md`
-  - `agents/duck-dry.agent.md`
-  - `agents/duck-builder.agent.md`
-- Skills:
-  - `src/skills/rubber-duck/duck-explain/SKILL.md`
-  - `src/skills/rubber-duck/duck-debug/SKILL.md`
-  - `src/skills/rubber-duck/duck-design/SKILL.md`
-  - `src/skills/rubber-duck/duck-review/SKILL.md`
-  - `src/skills/rubber-duck/duck-teach/SKILL.md`
-  - `src/skills/rubber-duck/duck-triage/SKILL.md`
+### Router
 
-## Router quick map
+- [🦆 rubber-duck router](../../../agents/rubber-duck.agent.md)
 
-- Review input (diff/code): start `duck-review`; chain `duck-reviewer` + `duck-adversary` + `duck-simple` (+`duck-dry` on duplication signal; `duck-triage` on test-gap signal).
-- Debug input (code + complaint): start `duck-debug`; chain `duck-investigator`; escalate `duck-triage` if repro weak; use `duck-builder` only for explicit bounded patch requests.
-- Explain input (snippet/path/log): start `duck-explain`; hand off to `duck-debug` for root-cause hunt, or `duck-review` for review output.
-- Design/tradeoff: start `duck-design`; chain `duck-simple` + `duck-adversary` (+`duck-dry` when shared-rule duplication appears).
-- Teach/how-it-works: `duck-teach`; hand off to `duck-debug` or `duck-review` if issue/review request emerges.
-- Test planning/coverage: `duck-triage`; chain `duck-review` when inline PR comments are needed.
-- Unrecognized: ask one clarifying question, then route.
+### Duckling subagents
 
-## Duckling roles (purpose + handoff)
+- [duck-investigator](../../../agents/duck-investigator.agent.md)
+- [duck-reviewer](../../../agents/duck-reviewer.agent.md)
+- [duck-adversary](../../../agents/duck-adversary.agent.md)
+- [duck-simple](../../../agents/duck-simple.agent.md)
+- [duck-dry](../../../agents/duck-dry.agent.md)
+- [duck-builder](../../../agents/duck-builder.agent.md)
 
-- `duck-investigator`: evidence collection only (defs/refs/callers/tests/imports). Hands implementation work to `duck-builder`.
-- `duck-reviewer`: final review comment stream. Delegates review contract to `duck-review`.
-- `duck-adversary`: failure/rollback/compat/security-misuse lens. Hands formatting and final thread output to `duck-reviewer`.
-- `duck-simple`: complexity minimization lens. Hands final review thread output to `duck-reviewer`.
-- `duck-dry`: duplication/divergence lens. Hands final review thread output to `duck-reviewer`.
-- `duck-builder`: bounded patching (1–2 files) after upstream diagnosis/review decision.
+### Skills
 
-For exact prefixes/output rules, see each agent file directly.
+- [duck-explain](./duck-explain/SKILL.md)
+- [duck-debug](./duck-debug/SKILL.md)
+- [duck-design](./duck-design/SKILL.md)
+- [duck-review](./duck-review/SKILL.md)
+- [duck-teach](./duck-teach/SKILL.md)
+- [duck-triage](./duck-triage/SKILL.md)
+- [duck-debt](./duck-debt/SKILL.md)
 
-## Skill roles (purpose + handoff)
+### Related policy docs
 
-- `duck-explain`: fast interpretation of code/log/query/config using short What/Why/Watch out/Next question blocks. Handoff to `duck-debug`, `duck-design`, `duck-review`, `duck-triage`, or `duck-teach` as needed.
-- `duck-debug`: Socratic runtime debugging. Handoff to `duck-triage` when repro remains weak.
-- `duck-design`: tradeoff and architecture facilitation. Handoff to `duck-debug` for runtime-value issues.
-- `duck-review`: review workflow + output contract source of truth. Used by `duck-reviewer`.
-- `duck-teach`: structured tutorial generation. Handoff to `duck-debug` or `duck-review` when needed.
-- `duck-triage`: test-gap and severity triage. Handoff inline review comments to `duck-review`.
+- [repo AGENTS policy](../../../AGENTS.md)
+- [agents overview](../../../agents/README.md)
+- [review comment examples](./duck-review/references/review-comment-examples.md)
 
-## Related docs
+---
 
-- `agents/README.md`
-- `src/skills/rubber-duck/duck-review/references/review-comment-examples.md`
+## 2) Operating Model (How system runs)
 
-Promoted install artifacts are generated under `skills/rubber-duck/**` via `npm run build:skills`.
+1. Router classifies user input shape (review/debug/explain/design/teach/triage/debt).
+2. Router activates primary skill.
+3. Router chains ducklings for lens-specific analysis when needed.
+4. Reviewer consolidates overlapping findings into one comment stream.
+5. Builder is last mile only, for explicit bounded patch requests.
+
+### Soft preflight before patching
+
+Before `duck-builder`, prefer evidence pass that confirms:
+
+- target artifact/path
+- expected behavior
+- smallest shared fix location (not only ticket path)
+
+If missing, ask one clarifying question or route investigator.
+
+---
+
+## 3) Router Decision Table
+
+| Input signal | Start with | Typical chain |
+|---|---|---|
+| “review this” + diff/code | `duck-review` | `duck-reviewer` + `duck-adversary` + `duck-simple` (+ `duck-dry` if duplication, + `duck-triage` if test gap) |
+| “debug this” + complaint | `duck-debug` | `duck-investigator` first, then `duck-triage` if repro weak, then `duck-builder` only on explicit bounded patch request |
+| “explain this” | `duck-explain` | escalate to `duck-debug` (bug) or `duck-review` (PR review output) |
+| “teach me/how works” | `duck-teach` | escalate to `duck-debug` or `duck-review` if issue emerges |
+| “design/tradeoffs” | `duck-design` | `duck-simple` + `duck-adversary` (+ `duck-dry` on shared-rule duplication) |
+| “what to test/test coverage” | `duck-triage` | `duck-review` if inline PR comments needed |
+| “what did we defer/duck debt” | `duck-debt` | report-only ledger of `duck-debt:` markers |
+| Unclear request | ask 1 clarifying question | route after answer |
+
+---
+
+## 4) Duckling Responsibilities (strict boundaries)
+
+### `duck-investigator`
+
+- Evidence only: defs/refs/callers/tests/imports, with evidence IDs (`E1`, `E2`, ...).
+- No fixes, no design decisions.
+- Feeds debug/review/design/triage with facts.
+- Reports coverage gaps explicitly (`not found` vs omitted) and names shared-path candidate when present.
+
+### `duck-reviewer`
+
+- Owns final review comment stream.
+- Applies priority order during merge:
+  - security/correctness
+  - data integrity
+  - rollback/compat
+  - test gaps
+  - simplification
+
+### `duck-adversary`
+
+- Failure modes, rollback, compatibility, security-misuse lens.
+- No style/simplification/test-ownership feedback.
+- Each finding carries explicit `Impact` and `Rollback` fields.
+
+### `duck-simple`
+
+- Complexity and overengineering lens.
+- Uses simplification tags (`🪶 yagni`, `📚 stdlib`, `🧱 native`, `✂️ shrink`, `🗑️ delete`).
+
+### `duck-dry`
+
+- Meaningful duplication and divergence risk lens.
+- Flags semantic duplication only (not superficial syntax repetition).
+- Each finding includes `Diverges when` trigger and `Extract start` location.
+
+### `duck-builder`
+
+- Surgical implementation only.
+- Scope: 1 file ideal, 2 files max.
+
+---
+
+## 5) Skill-by-Skill Operator Notes
+
+### `duck-debug`
+
+- Socratic root-cause flow.
+- Requires root-cause locality: prefer shared-path fix over per-caller symptom patches.
+
+### `duck-review`
+
+- Review output contract source of truth.
+- Prefixes include correctness/security/perf/test/doc plus simplification tags.
+- If finding spans risk + simplification, emit higher-risk prefix first.
+
+### `duck-triage`
+
+- Coverage, severity, test scenario recommendations.
+- Minimum runnable check rule for non-trivial logic changes.
+
+### `duck-design`
+
+- Tradeoff facilitation and constraint-first questioning.
+- Escalates runtime bugs back to debug.
+
+### `duck-explain`
+
+- 4-block explanation mode (What/Why/Watch out/Next question).
+
+### `duck-teach`
+
+- Structured tutorials with depth scaling.
+
+### `duck-debt`
+
+- Reads `duck-debt:` comments and emits debt ledger.
+- Report only; no edits.
+
+---
+
+## 6) Shared Ladder Policy (all duck skills)
+
+Before new code/abstraction, climb ladder and stop early:
+
+1. Need change at all?
+2. Reuse existing local helper/pattern?
+3. Use stdlib/native feature?
+4. Use already-installed dependency?
+5. Smallest safe bounded diff?
+6. Only then add new abstraction/code.
+
+Never simplify away trust-boundary validation, security, data-loss prevention, accessibility, or explicit user requirements.
+
+---
+
+## 7) Playbooks (copy/paste prompts)
+
+### Review playbook
+
+```text
+Review this diff. Use duck-review contract. Prioritize security/correctness first.
+If duplication appears, include duck-dry lens. If tests missing, include duck-triage.
+```
+
+### Debug playbook
+
+```text
+Debug this issue. Start with duck-investigator evidence map (defs/refs/callers/tests),
+then run duck-debug root-cause questioning. Suggest patch target only after caller map.
+```
+
+### Design playbook
+
+```text
+Evaluate this design with duck-design. Challenge constraints and tradeoffs.
+Include duck-simple and duck-adversary lenses. Keep one recommended next question.
+```
+
+### Triage playbook
+
+```text
+Triage this bug and test coverage. Classify severity, list missing tests,
+and propose one minimum runnable check for non-trivial logic changes.
+```
+
+### Debt playbook
+
+```text
+Run duck-debt. Scan for `duck-debt:` markers and output grouped ledger with
+ceiling + upgrade trigger + no-trigger counts.
+```
+
+---
+
+## 8) `duck-debt:` Marker Standard
+
+Use this exact format in code comments:
+
+```text
+duck-debt: <ceiling>, upgrade when <trigger>
+```
+
+Examples:
+
+```text
+duck-debt: O(n²) scan, upgrade when list >10k
+duck-debt: global lock, upgrade when throughput contention observed
+```
+
+---
+
+## 9) Common Failure Modes
+
+- Reviewer duplicates same issue across ducklings.
+  - Fix: merge by strongest priority prefix, emit one comment.
+- Builder starts before evidence.
+  - Fix: run soft preflight + investigator map first.
+- Simplification comment hides security issue.
+  - Fix: use risk prefix first, simplification second only if non-duplicative.
+- “No tests needed” over-applied.
+  - Fix: apply minimum runnable check rule for non-trivial logic.
+
+---
+
+## 10) Maintenance
+
+- Keep router rules and skill boundaries synchronized with agent files.
+- Update this README when adding/removing ducklings or skills.
+- Build promoted artifacts after skill updates:
+
+```bash
+npm run build:skills
+```
+
+---
+
+## Attribution
+
+Parts of Rubber Duck operating model adapt ideas from [Ponytail](https://github.com/DietrichGebert/ponytail) by Dietrich Gebert.
+
+### Concept mapping (Ponytail → Rubber Duck adaptation)
+
+- **Lazy ladder / first-rung decision policy**  
+  Ponytail: YAGNI → reuse → stdlib → native → installed dep → minimal code.  
+  Rubber Duck: shared “Duck Ladder” added across `duck-debug`, `duck-review`, `duck-triage`, `duck-design`, `duck-teach`, `duck-explain`.
+
+- **Root cause over symptom patching**  
+  Ponytail: fix shared path once, not caller-by-caller.  
+  Rubber Duck: `duck-debug` root-cause locality + caller-map-before-patch guidance.
+
+- **Overengineering review taxonomy**  
+  Ponytail: `delete/stdlib/native/yagni/shrink` review lens.  
+  Rubber Duck: simplification prefixes (`🪶 yagni`, `📚 stdlib`, `🧱 native`, `✂️ shrink`, `🗑️ delete`) in `duck-review` and `duck-simple`.
+
+- **Risk-first precedence during review**  
+  Ponytail: simplification never at expense of safety/correctness.  
+  Rubber Duck: reviewer merge order and prefix precedence enforce security/correctness first.
+
+- **Minimum-check discipline**  
+  Ponytail: non-trivial logic leaves one runnable check.  
+  Rubber Duck: `duck-triage` minimum runnable check rule.
+
+- **Deferred simplification ledger**  
+  Ponytail: `ponytail:` debt markers and debt harvesting.  
+  Rubber Duck: `duck-debt:` marker convention + `duck-debt` skill for read-only debt ledger.
+
+- **Safety carve-outs**  
+  Ponytail: never simplify away trust-boundary validation, security, data-loss prevention, accessibility.  
+  Rubber Duck: mirrored in repo [AGENTS policy](../../../AGENTS.md) minimal-change discipline and skill policy text.
+
+### Notes
+
+- Rubber Duck keeps its own Socratic + multi-duckling routing model.
+- Attribution covers conceptual influence, not verbatim behavior parity.

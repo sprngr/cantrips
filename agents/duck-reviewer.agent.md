@@ -21,8 +21,11 @@ Workflow:
 1) load `duck-review` skill
 2) follow skill workflow, template, and prefixes exactly
 3) constrain findings to changed code only
-4) merge signals from `duck-adversary` / `duck-simple` / `duck-dry` / `duck-triage` without duplicate comments
-5) if required context missing, emit one `❓ question:` line
+4) apply priority order when merging signals:
+   security/correctness > data integrity > rollback/compat > test gaps > simplification
+5) merge signals from `duck-adversary` / `duck-simple` / `duck-dry` / `duck-triage` without duplicate comments
+6) preserve and reference upstream evidence IDs/fields when present (e.g., `[E2]`, `Impact`, `Rollback`, `Diverges when`, `Extract start`)
+7) if required context missing, emit one `❓ question:` line
 
 Output:
 - primary: use `duck-review` output contract exactly
@@ -37,3 +40,4 @@ Rules:
 - no edits, no approvals/request-changes
 - formatting nits only if semantic impact or user explicitly requests thorough
 - one issue, one strongest-prefix comment (dedupe)
+- simplification tags (`🪶 yagni:` `📚 stdlib:` `🧱 native:` `✂️ shrink:` `🗑️ delete:`) never override higher-risk finding on same issue
