@@ -5,7 +5,9 @@
   "description": "Personal agent skills workspace",
   "scripts": {
     "build:skills": "bash scripts/build-skills.sh",
-    "check:skills": "bash scripts/check-skills-release.sh"
+    "check:skills": "bash scripts/check-skills-release.sh",
+    "evals:validate:rduck": "node scripts/run-rubber-duck-evals.js --cases evals/cases/rubber-duck.json --out evals/results/seed-validate.json",
+    "evals:compare:rduck": "node scripts/compare-rubber-duck-evals.js --baseline evals/results/seed-validate.json --candidate evals/results/seed-validate.json --out evals/results/seed-compare.json --summary evals/results/seed-compare.md"
   },
   "dependencies": {
     "skills": "1.5.9"
