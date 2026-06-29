@@ -2,6 +2,9 @@
 
 🔮 Because I'm still not convinced this isn't magic.
 
+> [!IMPORTANT]
+> Future versions of `rubber-duck` have moved to [sprngr/rubber-duck](https://github.com/sprngr/rubber-duck).
+
 > [!NOTE]
 > My preferred harness is [OpenCode](https://opencode.ai/) so you may need to make some tweaks to agents or skill permissions to fit your tooling.
 
@@ -27,17 +30,6 @@ Or install from local clone while developing:
 
 ```bash
 npx skills add /path/to/cantrips --full-depth
-```
-
-Install included agents (path depends on harness):
-
-```bash
-cp /path/to/cantrips/agents/*.agent.md /path/to/harness/agents/
-```
-
-Install AGENTS.md (path depends on harness):
-```bash
-cp /path/to/cantrips/AGENTS.md /path/to/harness/AGENTS.md
 ```
 
 ## Skill development workflow (`src/skills` -> `skills`)
