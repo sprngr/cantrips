@@ -94,7 +94,6 @@ npm run check:skills
 | `AGENTS.md` | Default prompt added to my sessions | - |
 | `agents/` | Routing + specialized agents | [agents/README.md](./agents/README.md) |
 | `agents/tests/skill-wizard/` | Manual skill-wizard behavior tests | [agents/tests/skill-wizard/README.md](./agents/tests/skill-wizard/README.md) |
-| `src/skills/rubber-duck/` | Rubber-duck workflow skills (development source) | [src/skills/rubber-duck/README.md](./src/skills/rubber-duck/README.md) |
 | `src/skills/meta-skills/` | Skill-authoring lifecycle toolkit (development source) | [src/skills/meta-skills/README.md](./src/skills/meta-skills/README.md) |
 | `src/skills/experimental/` | Incubating skills (no stability guarantees; development source) | [src/skills/experimental/README.md](./src/skills/experimental/README.md) |
 | `skills/` | Promoted install artifacts (built from `src/skills/**/.release-files`) | `npm run build:skills` |
